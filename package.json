@@ -1,0 +1,44 @@
+{
+  "name": "vertex-nextjs-starter",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/cache": "^11.4",
+    "@emotion/react": "^11.4",
+    "@emotion/server": "^11.4",
+    "@emotion/styled": "^11.3",
+    "@material-ui/core": "^5.0.0-beta.5",
+    "@material-ui/icons": "^5.0.0-beta.5",
+    "@vertexvis/api-client-node": "^0.14",
+    "@vertexvis/viewer-react": "^0.10",
+    "next": "^11.1",
+    "react": "^17.0",
+    "react-dom": "^17.0",
+    "react-hotkeys-hook": "^3.4",
+    "yarn": "^1.22.11"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15",
+    "@types/node": "^16",
+    "@types/react": "^17.0",
+    "@types/react-dom": "^17.0",
+    "@typescript-eslint/eslint-plugin": "^4",
+    "@typescript-eslint/parser": "^4",
+    "babel-plugin-import": "^1.13",
+    "eslint": "^7",
+    "eslint-config-next": "^11.1",
+    "eslint-config-prettier": "^8",
+    "eslint-plugin-simple-import-sort": "^7.0",
+    "prettier": "^2.3",
+    "tslib": "^2.3",
+    "typescript": "^4"
+  },
+  "scripts": {
+    "build": "next build",
+    "clean": "rm -rf .next/ node_modules/",
+    "dev": "next",
+    "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
+    "lint": "next lint",
+    "start": "next start"
+  }
+}
