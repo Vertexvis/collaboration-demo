@@ -30,7 +30,7 @@ type ViewerComponentType = React.ComponentType<
 type HOCViewerProps = React.RefAttributes<HTMLVertexViewerElement>;
 
 interface OnSelectProps extends HOCViewerProps {
-  readonly onSelect: (hit?: vertexvis.protobuf.stream.IHit) => Promise<void>;
+  readonly onSelect: (hit?: vertexvis.protobuf.stream.IHit) => void;
 }
 
 export const AnimationDurationMs = 1500;
@@ -75,11 +75,9 @@ function onTap<P extends ViewerProps>(
         const raycaster = scene?.raycaster();
 
         if (raycaster != null) {
-          const res = await raycaster.hitItems(e.detail.position, {
-            includeMetadata: true,
-          });
+          const res = await raycaster.hitItems(e.detail.position);
           const hit = (res?.hits ?? [])[0];
-          await onSelect(hit);
+          onSelect(hit);
         }
       }
     }

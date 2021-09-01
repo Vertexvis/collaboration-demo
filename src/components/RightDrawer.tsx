@@ -19,17 +19,11 @@ import {
 } from "@material-ui/icons";
 import React from "react";
 
-import { FileData } from "../lib/files";
-import { Metadata } from "../lib/metadata";
 import { RightDrawerWidth } from "./Layout";
-import { MetadataProperties } from "./MetadataProperties";
-import { RecentFiles } from "./RecentFiles";
 
 interface Props {
   readonly cameraController?: string;
   readonly clientId?: string;
-  readonly files: FileData[];
-  readonly metadata?: Metadata;
   readonly onCameraController: (control: boolean) => void;
   readonly open: boolean;
   readonly users: Record<number, User>;
@@ -48,8 +42,6 @@ const Title = styled((props) => <Typography variant="body2" {...props} />)(
 export function RightDrawer({
   cameraController,
   clientId,
-  files,
-  metadata,
   onCameraController,
   open,
   users,
@@ -68,18 +60,6 @@ export function RightDrawer({
       }}
       variant="persistent"
     >
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Title>Metadata Properties</Title>
-        </AccordionSummary>
-        <MetadataProperties metadata={metadata} />
-      </Accordion>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Title>Recent Files</Title>
-        </AccordionSummary>
-        <RecentFiles files={files} />
-      </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Title>Participants</Title>

@@ -7,8 +7,7 @@ import * as Y from "yjs";
 
 import { randomColor } from "../lib/colors";
 import { DefaultCredentials, head, StreamCredentials } from "../lib/config";
-import { FileData } from "../lib/files";
-import { Metadata, toMetadata } from "../lib/metadata";
+import { randomInt } from "../lib/random";
 import { selectByItemId, updateCamera } from "../lib/scene-items";
 import { useViewer } from "../lib/viewer";
 import { Header } from "./Header";
@@ -18,21 +17,19 @@ import { RightDrawer, User } from "./RightDrawer";
 import { Viewer } from "./Viewer";
 
 export interface Props {
-  readonly files: FileData[];
   readonly vertexEnv: Environment;
 }
 
-const name = `Rocky${(Math.random() * 100).toFixed(0)}`;
+const name = `User ${randomInt(1000)}`;
 const color = randomColor();
 
-export function Home({ files, vertexEnv }: Props): JSX.Element {
+export function Home({ vertexEnv }: Props): JSX.Element {
   const router = useRouter();
   const viewer = useViewer();
   const [credentials, setCredentials] = React.useState<
     StreamCredentials | undefined
   >();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [metadata, setMetadata] = React.useState<Metadata | undefined>();
   const provider = React.useRef<WebrtcProvider>();
   const doc = React.useRef(new Y.Doc());
   const yCamera = React.useRef(doc.current.getMap("camera"));
@@ -80,6 +77,7 @@ export function Home({ files, vertexEnv }: Props): JSX.Element {
         name,
       };
       provider.current.awareness.setLocalStateField("user", u);
+      // provider.current.awareness.setLocalStateField("mousePosition", u);
       setClientId(u.clientId);
       setUsers({ ...users, [u.clientId]: u });
       provider.current.awareness.on("change", () => {
@@ -136,15 +134,13 @@ export function Home({ files, vertexEnv }: Props): JSX.Element {
                 yCamera.current.set("camera", cam);
               }
             }}
-            onSelect={async (hit) => {
+            onSelect={(hit) => {
               console.debug({
                 hitNormal: hit?.hitNormal,
                 hitPoint: hit?.hitPoint,
-                partName: hit?.metadata?.partName,
                 sceneItemId: hit?.itemId?.hex,
                 sceneItemSuppliedId: hit?.itemSuppliedId?.value,
               });
-              setMetadata(toMetadata({ hit }));
               if (clientId != null) {
                 ySelection.current.set(clientId.toString(), {
                   itemId: hit?.itemId?.hex,
@@ -161,8 +157,6 @@ export function Home({ files, vertexEnv }: Props): JSX.Element {
         <RightDrawer
           cameraController={cameraController ?? undefined}
           clientId={clientId?.toString()}
-          files={files}
-          metadata={metadata}
           onCameraController={(control) =>
             yCamera.current.set(
               "cameraController",

@@ -1,13 +1,20 @@
-const Gray = "#6B7280";
-const Red = "#EF4444";
-const Amber = "#F59E0B";
-const Emerald = "#10B981";
-const Blue = "#3B82F6";
-const Indigo = "#6366F1";
-const Violet = "#8B5CF6";
-const Pink = "#EC4899";
+import { randomInt } from "./random";
 
-export const DefaultColors = [
+interface Shades {
+  dark: string;
+  light: string;
+}
+
+const Gray = { light: "#D1D5DB", dark: "#374151" };
+const Red = { light: "#FCA5A5", dark: "#B91C1C" };
+const Amber = { light: "#FCD34D", dark: "#B45309" };
+const Emerald = { light: "#6EE7B7", dark: "#047857" };
+const Blue = { light: "#93C5FD", dark: "#1D4ED8" };
+const Indigo = { light: "#A5B4FC", dark: "#4338CA" };
+const Violet = { light: "#C4B5FD", dark: "#6D28D9" };
+const Pink = { light: "#F9A8D4", dark: "#BE185D" };
+
+export const DefaultColors: Shades[] = [
   Gray,
   Red,
   Amber,
@@ -19,5 +26,7 @@ export const DefaultColors = [
 ];
 
 export function randomColor(): string {
-  return DefaultColors[Math.floor(Math.random() * DefaultColors.length)];
+  const shade = randomInt(2);
+  const color = DefaultColors[randomInt(DefaultColors.length)];
+  return shade ? color.light : color.dark;
 }

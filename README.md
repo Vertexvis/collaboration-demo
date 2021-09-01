@@ -1,6 +1,6 @@
 # Vertex Collaboration Demo
 
- Collaborate on 3D models in real-time using the Vertex Platform.
+Collaborate on 3D models in real-time using the Vertex Platform.
 
 ## Run locally in Docker
 
