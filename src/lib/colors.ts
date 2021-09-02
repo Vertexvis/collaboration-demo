@@ -14,6 +14,7 @@ const Indigo = { light: "#A5B4FC", dark: "#4338CA" };
 const Violet = { light: "#C4B5FD", dark: "#6D28D9" };
 const Pink = { light: "#F9A8D4", dark: "#BE185D" };
 
+export const DefaultColor = "#ffff00";
 export const DefaultColors: Shades[] = [
   Gray,
   Red,

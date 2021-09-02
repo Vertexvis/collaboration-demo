@@ -26,10 +26,14 @@ interface Props {
   readonly clientId?: string;
   readonly onCameraController: (control: boolean) => void;
   readonly open: boolean;
-  readonly users: Record<number, User>;
+  readonly awareness: Record<number, Awareness>;
 }
 
-export interface User {
+export interface Awareness {
+  readonly user: User;
+}
+
+interface User {
   readonly clientId: number;
   readonly color: string;
   readonly name: string;
@@ -44,10 +48,8 @@ export function RightDrawer({
   clientId,
   onCameraController,
   open,
-  users,
+  awareness,
 }: Props): JSX.Element {
-  console.log("RightDrawer", clientId, cameraController);
-
   return (
     <Drawer
       anchor="right"
@@ -60,29 +62,29 @@ export function RightDrawer({
       }}
       variant="persistent"
     >
-      <Accordion>
+      <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Title>Participants</Title>
         </AccordionSummary>
         <List>
-          {Object.entries(users).map(([k, v]) => (
+          {Object.entries(awareness).map(([k, v]) => (
             <ListItem key={k}>
               <Box
                 sx={{
-                  backgroundColor: v.color,
+                  backgroundColor: v.user.color,
                   borderRadius: 1,
                   height: "1rem",
                   mr: 1,
                   width: "1rem",
                 }}
               />
-              {v.name}
+              {v.user.name}
               {clientId === k && cameraController != clientId && (
                 <Tooltip title="Control camera">
                   <IconButton
                     color="primary"
                     onClick={() => onCameraController(true)}
-                    sx={{ ml: 2 }}
+                    sx={{ ml: 1 }}
                   >
                     <PlayCircleOutlined />
                   </IconButton>
@@ -93,7 +95,7 @@ export function RightDrawer({
                   <IconButton
                     color="primary"
                     onClick={() => onCameraController(false)}
-                    sx={{ ml: 2 }}
+                    sx={{ ml: 1 }}
                   >
                     <StopCircleOutlined />
                   </IconButton>
@@ -102,7 +104,7 @@ export function RightDrawer({
               {clientId !== k &&
                 cameraController != clientId &&
                 cameraController != null && (
-                  <CameraEnhanceOutlined sx={{ ml: 3 }} />
+                  <CameraEnhanceOutlined sx={{ ml: 2 }} />
                 )}
             </ListItem>
           ))}
