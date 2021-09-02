@@ -6,7 +6,6 @@ import * as Y from "yjs";
 
 import { randomColor } from "../lib/colors";
 import { DefaultCredentials } from "../lib/config";
-import { randomInt } from "../lib/random";
 import { selectByItemId, updateCamera } from "../lib/scene-items";
 import { useViewer } from "../lib/viewer";
 import { Header } from "./Header";
@@ -78,16 +77,17 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         }
       });
 
-      ySelection.current.observe(() => {
-        ySelection.current.forEach(({ itemId, oldItemId }, cId) => {
-          const s = provider.current?.awareness.states.get(parseInt(cId, 10));
-          if (s == null) return;
+      ySelection.current.observe((e) => {
+        e.keysChanged.forEach((k) => {
+          const s = provider.current?.awareness.states.get(parseInt(k, 10));
+          const sel = ySelection.current?.get(k);
+          if (s == null || sel == null) return;
 
           console.log(`ySelection by '${s.user.name}'`);
           selectByItemId({
             color: s.user.color,
-            deselectItemId: oldItemId,
-            itemId,
+            deselectItemId: sel.oldItemId,
+            itemId: sel.itemId,
             viewer: viewer.ref.current,
           });
         });
