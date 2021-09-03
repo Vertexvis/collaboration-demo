@@ -33,10 +33,13 @@ export interface Awareness {
   readonly user: User;
 }
 
-interface User {
-  readonly clientId: number;
+export interface UserData {
   readonly color: string;
   readonly name: string;
+}
+
+interface User extends UserData {
+  readonly clientId: number;
 }
 
 const Title = styled((props) => <Typography variant="body2" {...props} />)(

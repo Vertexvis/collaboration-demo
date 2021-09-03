@@ -4,21 +4,23 @@ import React from "react";
 import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 
-import { randomColor } from "../lib/colors";
 import { DefaultCredentials } from "../lib/config";
 import { selectByItemId, updateCamera } from "../lib/scene-items";
 import { useViewer } from "../lib/viewer";
 import { Header } from "./Header";
+import { JoinDialog } from "./JoinDialog";
 import { Layout, RightDrawerWidth } from "./Layout";
-import { NameDialog } from "./NameDialog";
-import { Awareness, RightDrawer } from "./RightDrawer";
+import { Awareness, RightDrawer, UserData } from "./RightDrawer";
 import { Viewer } from "./Viewer";
 
 export interface Props {
   readonly vertexEnv: Environment;
 }
 
-const color = randomColor();
+interface UndoEvent {
+  stackItem: { meta: Map<any, any> };
+  type: "undo" | "redo";
+}
 
 export function Home({ vertexEnv }: Props): JSX.Element {
   const viewer = useViewer();
@@ -26,9 +28,10 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const doc = React.useRef(new Y.Doc());
   const yCamera = React.useRef(doc.current.getMap("camera"));
   const ySelection = React.useRef(doc.current.getMap("selection"));
+  const undoSelection = React.useRef(new Y.UndoManager(ySelection.current));
 
-  const [name, setName] = React.useState<string>();
-  const [dialogOpen, setDialogOpen] = React.useState(!name);
+  const [userData, setUserData] = React.useState<UserData>();
+  const [dialogOpen, setDialogOpen] = React.useState(!userData);
   const [initialized, setInitialized] = React.useState(false);
   const [cameraController, setCameraController] = React.useState<string>();
   const [clientId, setClientId] = React.useState<number>();
@@ -37,20 +40,35 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   );
 
   React.useEffect(() => {
-    if (name && !initialized && !provider.current?.connected) {
+    if (userData && !initialized && !provider.current?.connected) {
       setInitialized(true);
       provider.current = new WebrtcProvider("vertex-demo", doc.current);
 
+      const cId = provider.current?.awareness.clientID;
       const localA: Awareness = {
         user: {
-          clientId: provider.current?.awareness.clientID,
-          color,
-          name: name ?? "",
+          clientId: cId,
+          color: userData.color,
+          name: userData.name,
         },
       };
       provider.current.awareness.setLocalStateField("user", localA.user);
       setClientId(localA.user.clientId);
       setAwareness({ ...awareness, [localA.user.clientId]: localA });
+
+      undoSelection.current.on("stack-item-added", (e: UndoEvent) => {
+        e.stackItem.meta.set(
+          "deselectItem",
+          ySelection.current.get(cId.toString())?.itemId
+        );
+      });
+
+      undoSelection.current.on("stack-item-popped", (e: UndoEvent) => {
+        selectByItemId({
+          deselectItemId: e.stackItem.meta.get("deselectItem"),
+          viewer: viewer.ref.current,
+        });
+      });
 
       provider.current.awareness.on("change", () => {
         const states = provider.current?.awareness.getStates().entries();
@@ -83,7 +101,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           const sel = ySelection.current?.get(k);
           if (s == null || sel == null) return;
 
-          console.log(`ySelection by '${s.user.name}'`);
+          console.log(`ySelection by '${s.user.name}', ${JSON.stringify(sel)}`);
           selectByItemId({
             color: s.user.color,
             deselectItemId: sel.oldItemId,
@@ -93,8 +111,18 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         });
       });
     }
-  }, [awareness, cameraController, initialized, name]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [awareness, cameraController, initialized, userData]);
+  /*
+    TODO:
+    - Move color to NameDialog
+    - Broadcast state
+    - Save state prior to broadcast/host
+    - Camera as undo meta
+    - Button to share pointer
+    - Snapshot versioning
+    - Add to yjs docs
+  */
   return (
     <Layout
       header={<Header onOpenSceneClick={() => setDialogOpen(true)} />}
@@ -121,14 +149,18 @@ export function Home({ vertexEnv }: Props): JSX.Element {
                 sceneItemId: hit?.itemId?.hex,
                 sceneItemSuppliedId: hit?.itemSuppliedId?.value,
               });
-              if (clientId != null) {
-                ySelection.current.set(clientId.toString(), {
+              if (clientId == null) return;
+
+              const cId = clientId.toString();
+              const sel = ySelection.current.get(cId);
+              if (sel?.itemId != hit?.itemId?.hex) {
+                ySelection.current.set(cId, {
                   itemId: hit?.itemId?.hex,
-                  oldItemId: ySelection.current.get(clientId.toString())
-                    ?.itemId,
+                  oldItemId: ySelection.current.get(cId)?.itemId,
                 });
               }
             }}
+            undoSelection={undoSelection}
             viewer={viewer.ref}
           />
         )
@@ -150,9 +182,9 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       rightDrawerWidth={RightDrawerWidth}
     >
       {dialogOpen && (
-        <NameDialog
-          onSave={(n: string) => {
-            setName(n);
+        <JoinDialog
+          onSave={(n: string, c: string) => {
+            setUserData({ color: c, name: n });
             setDialogOpen(false);
           }}
           open={dialogOpen}
