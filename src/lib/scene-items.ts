@@ -8,7 +8,7 @@ interface Req {
 interface SelectByHitReq extends Req {
   readonly color?: string;
   readonly deselectItemId?: string;
-  readonly itemId?: string;
+  readonly selectItemId?: string;
 }
 
 interface UpdateCameraReq extends Req {
@@ -26,7 +26,7 @@ export function createSelectColor(hex: string): ColorMaterial.ColorMaterial {
 export async function selectByItemId({
   color = "#ffff00",
   deselectItemId,
-  itemId,
+  selectItemId,
   viewer,
 }: SelectByHitReq): Promise<void> {
   if (viewer == null) return;
@@ -34,16 +34,16 @@ export async function selectByItemId({
   const scene = await viewer.scene();
   if (scene == null) return;
 
-  if (itemId != null || deselectItemId != null) {
+  if (selectItemId != null || deselectItemId != null) {
     await scene
       .items((op) => {
         const de = deselectItemId
           ? [op.where((q) => q.withItemId(deselectItemId)).deselect()]
           : [];
-        const se = itemId
+        const se = selectItemId
           ? [
               op
-                .where((q) => q.withItemId(itemId))
+                .where((q) => q.withItemId(selectItemId))
                 .select(createSelectColor(color)),
             ]
           : [];

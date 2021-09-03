@@ -12,9 +12,9 @@ import {
 import { drawerClasses } from "@material-ui/core/Drawer";
 import { styled } from "@material-ui/core/styles";
 import {
-  CameraEnhanceOutlined,
   ExpandMore,
   PlayCircleOutlined,
+  ScreenShare,
   StopCircleOutlined,
 } from "@material-ui/icons";
 import React from "react";
@@ -82,33 +82,33 @@ export function RightDrawer({
                 }}
               />
               {v.user.name}
-              {clientId === k && cameraController != clientId && (
-                <Tooltip title="Control camera">
-                  <IconButton
-                    color="primary"
-                    onClick={() => onCameraController(true)}
-                    sx={{ ml: 1 }}
-                  >
-                    <PlayCircleOutlined />
-                  </IconButton>
-                </Tooltip>
+              {clientId === k ? (
+                cameraController == clientId ? (
+                  <Tooltip title="Stop camera control">
+                    <IconButton
+                      color="primary"
+                      onClick={() => onCameraController(false)}
+                      sx={{ ml: 1 }}
+                    >
+                      <StopCircleOutlined />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Control camera">
+                    <IconButton
+                      color="primary"
+                      onClick={() => onCameraController(true)}
+                      sx={{ ml: 1 }}
+                    >
+                      <PlayCircleOutlined />
+                    </IconButton>
+                  </Tooltip>
+                )
+              ) : cameraController != clientId && cameraController != null ? (
+                <ScreenShare color="action" sx={{ ml: 2 }} />
+              ) : (
+                <></>
               )}
-              {clientId === k && cameraController == clientId && (
-                <Tooltip title="Stop camera control">
-                  <IconButton
-                    color="primary"
-                    onClick={() => onCameraController(false)}
-                    sx={{ ml: 1 }}
-                  >
-                    <StopCircleOutlined />
-                  </IconButton>
-                </Tooltip>
-              )}
-              {clientId !== k &&
-                cameraController != clientId &&
-                cameraController != null && (
-                  <CameraEnhanceOutlined sx={{ ml: 2 }} />
-                )}
             </ListItem>
           ))}
         </List>

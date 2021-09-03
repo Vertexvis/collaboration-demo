@@ -8,13 +8,14 @@ import {
   VertexViewerViewCube,
 } from "@vertexvis/viewer-react";
 import React from "react";
+import * as Y from "yjs";
 
 import { StreamCredentials } from "../lib/config";
 import { ViewerSpeedDial } from "./ViewerSpeedDial";
 
 interface ViewerProps extends ViewerJSX.VertexViewer {
   readonly credentials: StreamCredentials;
-  // readonly undoSelection: React.MutableRefObject<Y.UndoManager>;
+  readonly undoSelection: React.MutableRefObject<Y.UndoManager | null>;
   readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
 }
 
@@ -39,7 +40,7 @@ export const Viewer = onTap(UnwrappedViewer);
 
 function UnwrappedViewer({
   credentials,
-  // undoSelection,
+  undoSelection,
   viewer,
   ...props
 }: ViewerProps): JSX.Element {
@@ -59,7 +60,7 @@ function UnwrappedViewer({
         />
       </VertexViewerToolbar>
       <VertexViewerToolbar placement="bottom-right">
-        <ViewerSpeedDial viewer={viewer} />
+        <ViewerSpeedDial undoSelection={undoSelection} viewer={viewer} />
       </VertexViewerToolbar>
     </VertexViewer>
   );

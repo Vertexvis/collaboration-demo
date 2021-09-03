@@ -17,18 +17,13 @@ export interface Props {
   readonly vertexEnv: Environment;
 }
 
-// interface UndoEvent {
-//   stackItem: { meta: Map<any, any> };
-//   type: "undo" | "redo";
-// }
-
 export function Home({ vertexEnv }: Props): JSX.Element {
   const viewer = useViewer();
   const provider = React.useRef<WebrtcProvider>();
-  const doc = React.useRef(new Y.Doc());
-  const yCamera = React.useRef(doc.current.getMap("camera"));
-  const ySelection = React.useRef(doc.current.getMap("selection"));
-  // const undoSelection = React.useRef(new Y.UndoManager(ySelection.current));
+  const yDoc = React.useRef(new Y.Doc());
+  const yCamera = React.useRef(yDoc.current.getMap("camera"));
+  const ySelection = React.useRef(yDoc.current.getMap("selection"));
+  const undoSelection = React.useRef(new Y.UndoManager(ySelection.current));
 
   const [userData, setUserData] = React.useState<UserData>();
   const [dialogOpen, setDialogOpen] = React.useState(!userData);
@@ -42,7 +37,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   React.useEffect(() => {
     if (userData && !initialized && !provider.current?.connected) {
       setInitialized(true);
-      provider.current = new WebrtcProvider("vertex-demo", doc.current);
+      provider.current = new WebrtcProvider("vertex-demo", yDoc.current);
 
       const cId = provider.current?.awareness.clientID;
       const localA: Awareness = {
@@ -55,20 +50,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       provider.current.awareness.setLocalStateField("user", localA.user);
       setClientId(localA.user.clientId);
       setAwareness({ ...awareness, [localA.user.clientId]: localA });
-
-      // undoSelection.current.on("stack-item-added", (e: UndoEvent) => {
-      //   e.stackItem.meta.set(
-      //     "deselectItem",
-      //     ySelection.current.get(cId.toString())?.itemId
-      //   );
-      // });
-
-      // undoSelection.current.on("stack-item-popped", (e: UndoEvent) => {
-      //   selectByItemId({
-      //     deselectItemId: e.stackItem.meta.get("deselectItem"),
-      //     viewer: viewer.ref.current,
-      //   });
-      // });
 
       provider.current.awareness.on("change", () => {
         const states = provider.current?.awareness.getStates().entries();
@@ -87,7 +68,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         const cc = yCamera.current.get("cameraController");
         setCameraController(cc);
         if (cc !== provider.current?.awareness.clientID) {
-          console.log("Calling updateCamera");
           updateCamera({
             camera: yCamera.current.get("camera"),
             viewer: viewer.ref.current,
@@ -96,33 +76,43 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       });
 
       ySelection.current.observe((e) => {
-        e.keysChanged.forEach((k) => {
-          const s = provider.current?.awareness.states.get(parseInt(k, 10));
-          const sel = ySelection.current?.get(k);
-          if (s == null || sel == null) return;
+        e.changes.keys.forEach(({ action, oldValue }, key) => {
+          const a = provider.current?.awareness.states.get(parseInt(key, 10));
+          const sel = ySelection.current.get(key);
+          if (a == null) return;
 
-          console.log(`ySelection by '${s.user.name}', ${JSON.stringify(sel)}`);
-          selectByItemId({
-            color: s.user.color,
-            deselectItemId: sel.oldItemId,
-            itemId: sel.itemId,
-            viewer: viewer.ref.current,
-          });
+          const color = a.user.color;
+          console.log(
+            `${a.user.name} ${action}, new=${JSON.stringify(
+              sel
+            )}, old=${JSON.stringify(oldValue)}`
+          );
+          if (action === "add") {
+            selectByItemId({
+              color,
+              selectItemId: sel?.selectItemId,
+              viewer: viewer.ref.current,
+            });
+          } else if (action === "update") {
+            selectByItemId({
+              color,
+              selectItemId: sel?.selectItemId,
+              deselectItemId: oldValue?.selectItemId,
+              viewer: viewer.ref.current,
+            });
+          } else if (action === "delete") {
+            selectByItemId({
+              color,
+              deselectItemId: oldValue?.selectItemId,
+              viewer: viewer.ref.current,
+            });
+          }
         });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [awareness, cameraController, initialized, userData]);
-  /*
-    TODO:
-    - Move color to NameDialog
-    - Broadcast state
-    - Save state prior to broadcast/host
-    - Camera as undo meta
-    - Button to share pointer
-    - Snapshot versioning
-    - Add to yjs docs
-  */
+
   return (
     <Layout
       header={<Header onOpenSceneClick={() => setDialogOpen(true)} />}
@@ -138,7 +128,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
                 cameraController === provider.current?.awareness.clientID &&
                 !equal(cam, yCamera.current.get("camera"))
               ) {
-                console.log("Updating yCamera");
                 yCamera.current.set("camera", cam);
               }
             }}
@@ -152,15 +141,11 @@ export function Home({ vertexEnv }: Props): JSX.Element {
               if (clientId == null) return;
 
               const cId = clientId.toString();
-              const sel = ySelection.current.get(cId);
-              if (sel?.itemId != hit?.itemId?.hex) {
-                ySelection.current.set(cId, {
-                  itemId: hit?.itemId?.hex,
-                  oldItemId: ySelection.current.get(cId)?.itemId,
-                });
+              if (ySelection.current.get(cId)?.itemId != hit?.itemId?.hex) {
+                ySelection.current.set(cId, { selectItemId: hit?.itemId?.hex });
               }
             }}
-            // undoSelection={undoSelection}
+            undoSelection={undoSelection}
             viewer={viewer.ref}
           />
         )
