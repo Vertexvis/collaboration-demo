@@ -132,17 +132,18 @@ export function Home({ vertexEnv }: Props): JSX.Element {
               }
             }}
             onSelect={(hit) => {
+              const sceneItemId = hit?.itemId?.hex;
               console.debug({
                 hitNormal: hit?.hitNormal,
                 hitPoint: hit?.hitPoint,
-                sceneItemId: hit?.itemId?.hex,
+                sceneItemId,
                 sceneItemSuppliedId: hit?.itemSuppliedId?.value,
               });
               if (clientId == null) return;
 
               const cId = clientId.toString();
-              if (ySelection.current.get(cId)?.itemId != hit?.itemId?.hex) {
-                ySelection.current.set(cId, { selectItemId: hit?.itemId?.hex });
+              if (ySelection.current.get(cId)?.selectItemId != sceneItemId) {
+                ySelection.current.set(cId, { selectItemId: sceneItemId });
               }
             }}
             undoSelection={undoSelection}
