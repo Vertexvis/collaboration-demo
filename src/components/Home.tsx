@@ -17,10 +17,10 @@ export interface Props {
   readonly vertexEnv: Environment;
 }
 
-interface UndoEvent {
-  stackItem: { meta: Map<any, any> };
-  type: "undo" | "redo";
-}
+// interface UndoEvent {
+//   stackItem: { meta: Map<any, any> };
+//   type: "undo" | "redo";
+// }
 
 export function Home({ vertexEnv }: Props): JSX.Element {
   const viewer = useViewer();
@@ -28,7 +28,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const doc = React.useRef(new Y.Doc());
   const yCamera = React.useRef(doc.current.getMap("camera"));
   const ySelection = React.useRef(doc.current.getMap("selection"));
-  const undoSelection = React.useRef(new Y.UndoManager(ySelection.current));
+  // const undoSelection = React.useRef(new Y.UndoManager(ySelection.current));
 
   const [userData, setUserData] = React.useState<UserData>();
   const [dialogOpen, setDialogOpen] = React.useState(!userData);
@@ -56,19 +56,19 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       setClientId(localA.user.clientId);
       setAwareness({ ...awareness, [localA.user.clientId]: localA });
 
-      undoSelection.current.on("stack-item-added", (e: UndoEvent) => {
-        e.stackItem.meta.set(
-          "deselectItem",
-          ySelection.current.get(cId.toString())?.itemId
-        );
-      });
+      // undoSelection.current.on("stack-item-added", (e: UndoEvent) => {
+      //   e.stackItem.meta.set(
+      //     "deselectItem",
+      //     ySelection.current.get(cId.toString())?.itemId
+      //   );
+      // });
 
-      undoSelection.current.on("stack-item-popped", (e: UndoEvent) => {
-        selectByItemId({
-          deselectItemId: e.stackItem.meta.get("deselectItem"),
-          viewer: viewer.ref.current,
-        });
-      });
+      // undoSelection.current.on("stack-item-popped", (e: UndoEvent) => {
+      //   selectByItemId({
+      //     deselectItemId: e.stackItem.meta.get("deselectItem"),
+      //     viewer: viewer.ref.current,
+      //   });
+      // });
 
       provider.current.awareness.on("change", () => {
         const states = provider.current?.awareness.getStates().entries();
@@ -160,7 +160,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
                 });
               }
             }}
-            undoSelection={undoSelection}
+            // undoSelection={undoSelection}
             viewer={viewer.ref}
           />
         )

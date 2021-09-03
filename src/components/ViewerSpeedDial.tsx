@@ -1,26 +1,25 @@
 import { SpeedDial, SpeedDialAction } from "@material-ui/core";
-import { Redo, Undo, ZoomOutMap } from "@material-ui/icons";
-import * as Y from "yjs";
+import { ZoomOutMap } from "@material-ui/icons";
 
 import { Action, AnimationDurationMs } from "./Viewer";
 
 interface Props {
-  readonly undoSelection: React.MutableRefObject<Y.UndoManager>;
+  // readonly undoSelection: React.MutableRefObject<Y.UndoManager>;
   readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
 }
 
-export function ViewerSpeedDial({ undoSelection, viewer }: Props): JSX.Element {
+export function ViewerSpeedDial({ viewer }: Props): JSX.Element {
   const actions: Action[] = [
-    {
-      icon: <Redo />,
-      name: "Redo",
-      onClick: () => redo(),
-    },
-    {
-      icon: <Undo />,
-      name: "Undo",
-      onClick: () => undo(),
-    },
+    // {
+    //   icon: <Redo />,
+    //   name: "Redo",
+    //   onClick: () => redo(),
+    // },
+    // {
+    //   icon: <Undo />,
+    //   name: "Undo",
+    //   onClick: () => undo(),
+    // },
     {
       icon: <ZoomOutMap />,
       name: "Fit all",
@@ -28,13 +27,13 @@ export function ViewerSpeedDial({ undoSelection, viewer }: Props): JSX.Element {
     },
   ];
 
-  function redo(): void {
-    undoSelection.current.redo();
-  }
+  // function redo(): void {
+  //   undoSelection.current.redo();
+  // }
 
-  function undo(): void {
-    undoSelection.current.undo();
-  }
+  // function undo(): void {
+  //   undoSelection.current.undo();
+  // }
 
   async function fitAll(): Promise<void> {
     (await viewer.current?.scene())
