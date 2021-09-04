@@ -7,7 +7,6 @@ import * as Y from "yjs";
 import { DefaultCredentials } from "../lib/config";
 import { selectByItemId, updateCamera } from "../lib/scene-items";
 import { useViewer } from "../lib/viewer";
-import { Header } from "./Header";
 import { JoinDialog } from "./JoinDialog";
 import { Layout, RightDrawerWidth } from "./Layout";
 import { Awareness, RightDrawer, UserData } from "./RightDrawer";
@@ -115,7 +114,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
 
   return (
     <Layout
-      header={<Header onOpenSceneClick={() => setDialogOpen(true)} />}
       main={
         viewer.isReady && (
           <Viewer
