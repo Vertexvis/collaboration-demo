@@ -104,7 +104,7 @@ export function RightDrawer({
                     </IconButton>
                   </Tooltip>
                 )
-              ) : cameraController != clientId && cameraController != null ? (
+              ) : cameraController != clientId && cameraController == k ? (
                 <ScreenShare color="action" sx={{ ml: 2 }} />
               ) : (
                 <></>
