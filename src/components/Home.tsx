@@ -24,6 +24,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const ySelection = React.useRef(yDoc.current.getMap("selection"));
   const undoSelection = React.useRef(new Y.UndoManager(ySelection.current));
 
+  const [meetingName, setMeetingName] = React.useState<string>();
   const [userData, setUserData] = React.useState<UserData>();
   const [dialogOpen, setDialogOpen] = React.useState(!userData);
   const [initialized, setInitialized] = React.useState(false);
@@ -34,9 +35,14 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   );
 
   React.useEffect(() => {
-    if (userData && !initialized && !provider.current?.connected) {
+    if (
+      meetingName &&
+      userData &&
+      !initialized &&
+      !provider.current?.connected
+    ) {
       setInitialized(true);
-      provider.current = new WebrtcProvider("vertex-demo", yDoc.current);
+      provider.current = new WebrtcProvider(meetingName, yDoc.current);
 
       const cId = provider.current?.awareness.clientID;
       const localA: Awareness = {
@@ -110,7 +116,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [awareness, cameraController, initialized, userData]);
+  }, [awareness, cameraController, initialized, meetingName, userData]);
 
   return (
     <Layout
@@ -153,6 +159,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         <RightDrawer
           cameraController={cameraController ?? undefined}
           clientId={clientId?.toString()}
+          meetingName={meetingName}
           onCameraController={(control) =>
             yCamera.current.set(
               "cameraController",
@@ -167,7 +174,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     >
       {dialogOpen && (
         <JoinDialog
-          onSave={(n: string, c: string) => {
+          onSave={(mn: string, n: string, c: string) => {
+            setMeetingName(mn);
             setUserData({ color: c, name: n });
             setDialogOpen(false);
           }}

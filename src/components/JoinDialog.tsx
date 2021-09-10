@@ -12,7 +12,7 @@ import { randomColor } from "../lib/colors";
 
 interface Props {
   readonly open: boolean;
-  readonly onSave: (name: string, color: string) => void;
+  readonly onSave: (meetingName: string, name: string, color: string) => void;
 }
 
 interface Value {
@@ -22,21 +22,35 @@ interface Value {
 const color = randomColor();
 
 export function JoinDialog({ open, onSave }: Props): JSX.Element {
+  const [meetingName, setMeetingName] = React.useState<string>("");
   const [name, setName] = React.useState<string>("");
-  const empty = name === "";
 
   function handleNameChange(e: React.ChangeEvent<Value>): void {
     setName(e.target.value);
   }
 
+  function handleMeetingNameChange(e: React.ChangeEvent<Value>): void {
+    setMeetingName(e.target.value);
+  }
+
   function handleSave(): void {
-    if (!empty) onSave(name, color);
+    if (name !== "" && meetingName !== "") onSave(meetingName, name, color);
   }
 
   return (
     <Dialog fullWidth maxWidth="md" open={open}>
       <DialogTitle>Join Meeting</DialogTitle>
       <DialogContent>
+        <TextField
+          autoFocus
+          fullWidth
+          label="Meeting name"
+          margin="normal"
+          onChange={handleMeetingNameChange}
+          required
+          size="small"
+          value={meetingName}
+        />
         <TextField
           autoFocus
           fullWidth

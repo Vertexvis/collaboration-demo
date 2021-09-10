@@ -30,7 +30,7 @@
     "eslint-config-next": "^11.1",
     "eslint-config-prettier": "^8",
     "eslint-plugin-simple-import-sort": "^7.0",
-    "prettier": "^2.3",
+    "prettier": "^2.4",
     "tslib": "^2.3",
     "typescript": "^4"
   },
