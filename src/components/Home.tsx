@@ -7,6 +7,7 @@ import * as Y from "yjs";
 import { DefaultCredentials } from "../lib/config";
 import { selectByItemId, updateCamera } from "../lib/scene-items";
 import { useViewer } from "../lib/viewer";
+import { Header } from "./Header";
 import { JoinDialog } from "./JoinDialog";
 import { Layout, RightDrawerWidth } from "./Layout";
 import { Awareness, RightDrawer, UserData } from "./RightDrawer";
@@ -120,6 +121,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
 
   return (
     <Layout
+      header={<Header meetingName={meetingName} />}
       main={
         viewer.isReady && (
           <Viewer
@@ -159,7 +161,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         <RightDrawer
           cameraController={cameraController ?? undefined}
           clientId={clientId?.toString()}
-          meetingName={meetingName}
           onCameraController={(control) =>
             yCamera.current.set(
               "cameraController",

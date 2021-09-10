@@ -24,7 +24,6 @@ import { RightDrawerWidth } from "./Layout";
 interface Props {
   readonly cameraController?: string;
   readonly clientId?: string;
-  readonly meetingName?: string;
   readonly onCameraController: (control: boolean) => void;
   readonly open: boolean;
   readonly awareness: Record<number, Awareness>;
@@ -50,7 +49,6 @@ const Title = styled((props) => <Typography variant="body2" {...props} />)(
 export function RightDrawer({
   cameraController,
   clientId,
-  meetingName,
   onCameraController,
   open,
   awareness,
@@ -72,12 +70,6 @@ export function RightDrawer({
           <Title>Participants</Title>
         </AccordionSummary>
         <List>
-          <ListItem>
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography variant="subtitle2">Meeting</Typography>
-              <Typography variant="body2">{meetingName ?? ""}</Typography>
-            </Box>
-          </ListItem>
           {Object.entries(awareness).map(([k, v]) => (
             <ListItem key={k}>
               <Box
