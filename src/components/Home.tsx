@@ -88,7 +88,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           if (a == null) return;
 
           const color = a.user.color;
-          console.log(
+          console.debug(
             `${a.user.name} ${action}, new=${JSON.stringify(
               sel
             )}, old=${JSON.stringify(oldValue)}`

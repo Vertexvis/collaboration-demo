@@ -1,4 +1,4 @@
-import { Theme } from "@material-ui/core/styles";
+import { Theme } from "@mui/material/styles";
 
 interface Transition {
   readonly easing: string;

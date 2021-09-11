@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
-} from "@material-ui/core";
+} from "@mui/material";
 import React from "react";
 
 import { randomColor } from "../lib/colors";
@@ -52,7 +52,6 @@ export function JoinDialog({ open, onSave }: Props): JSX.Element {
           value={meetingName}
         />
         <TextField
-          autoFocus
           fullWidth
           label="Name"
           margin="normal"

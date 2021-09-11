@@ -1,4 +1,10 @@
 import {
+  ExpandMore,
+  PlayCircleOutlined,
+  ScreenShare,
+  StopCircleOutlined,
+} from "@mui/icons-material";
+import {
   Accordion,
   AccordionSummary,
   Box,
@@ -8,15 +14,9 @@ import {
   ListItem,
   Tooltip,
   Typography,
-} from "@material-ui/core";
-import { drawerClasses } from "@material-ui/core/Drawer";
-import { styled } from "@material-ui/core/styles";
-import {
-  ExpandMore,
-  PlayCircleOutlined,
-  ScreenShare,
-  StopCircleOutlined,
-} from "@material-ui/icons";
+} from "@mui/material";
+import { drawerClasses } from "@mui/material/Drawer";
+import { styled } from "@mui/material/styles";
 import React from "react";
 
 import { RightDrawerWidth } from "./Layout";

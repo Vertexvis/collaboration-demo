@@ -1,5 +1,5 @@
-import { SpeedDial, SpeedDialAction } from "@material-ui/core";
-import { Redo, Undo, ZoomOutMap } from "@material-ui/icons";
+import { Redo, Undo, ZoomOutMap } from "@mui/icons-material";
+import { SpeedDial, SpeedDialAction } from "@mui/material";
 import * as Y from "yjs";
 
 import { Action, AnimationDurationMs } from "./Viewer";

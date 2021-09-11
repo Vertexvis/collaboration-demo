@@ -1,5 +1,5 @@
-import { AppBar as MuiAppBar, Box, Toolbar } from "@material-ui/core";
-import { styled } from "@material-ui/core/styles";
+import { AppBar as MuiAppBar, Box, Toolbar } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import React from "react";
 
 import { easeOutEntering, sharpLeaving } from "../lib/transitions";
