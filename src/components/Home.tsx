@@ -1,4 +1,4 @@
-import type { Environment } from "@vertexvis/viewer";
+import { Environment, Viewport } from "@vertexvis/viewer";
 import equal from "fast-deep-equal/es6/react";
 import React from "react";
 import { WebrtcProvider } from "y-webrtc";
@@ -12,6 +12,7 @@ import { JoinDialog } from "./JoinDialog";
 import { Layout, RightDrawerWidth } from "./Layout";
 import { Awareness, RightDrawer, UserData } from "./RightDrawer";
 import { Viewer } from "./Viewer";
+import { Pin, PinColor } from "./ViewerSpeedDial";
 
 export interface Props {
   readonly vertexEnv: Environment;
@@ -22,8 +23,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const provider = React.useRef<WebrtcProvider>();
   const yDoc = React.useRef(new Y.Doc());
   const yCamera = React.useRef(yDoc.current.getMap("camera"));
-  const ySelection = React.useRef(yDoc.current.getMap("selection"));
-  const undoSelection = React.useRef(new Y.UndoManager(ySelection.current));
+  const yModel = React.useRef(yDoc.current.getMap("model"));
+  const undoManager = React.useRef(new Y.UndoManager(yModel.current));
 
   const [meetingName, setMeetingName] = React.useState<string>();
   const [userData, setUserData] = React.useState<UserData>();
@@ -34,6 +35,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const [awareness, setAwareness] = React.useState<Record<number, Awareness>>(
     {}
   );
+  const [pinsEnabled, setPinsEnabled] = React.useState(false);
+  const [pins, setPins] = React.useState<Pin[]>([]);
 
   React.useEffect(() => {
     if (
@@ -81,28 +84,28 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         }
       });
 
-      ySelection.current.observe((e) => {
+      yModel.current.observe((e) => {
         e.changes.keys.forEach(({ action, oldValue }, key) => {
-          const a = provider.current?.awareness.states.get(parseInt(key, 10));
-          const sel = ySelection.current.get(key);
+          const a = getAwareness(key, provider.current);
+          const cur = yModel.current.get(key);
           if (a == null) return;
 
           const color = a.user.color;
           console.debug(
             `${a.user.name} ${action}, new=${JSON.stringify(
-              sel
+              cur
             )}, old=${JSON.stringify(oldValue)}`
           );
           if (action === "add") {
             selectByItemId({
               color,
-              selectItemId: sel?.selectItemId,
+              selectItemId: cur?.selectItemId,
               viewer: viewer.ref.current,
             });
           } else if (action === "update") {
             selectByItemId({
               color,
-              selectItemId: sel?.selectItemId,
+              selectItemId: cur?.selectItemId,
               deselectItemId: oldValue?.selectItemId,
               viewer: viewer.ref.current,
             });
@@ -114,6 +117,21 @@ export function Home({ vertexEnv }: Props): JSX.Element {
             });
           }
         });
+        let ps: Pin[] = [];
+        yModel.current.forEach(
+          (v: { pins: Pin[] }, k: string) =>
+            (ps = v.pins
+              ? ps.concat(
+                  v.pins.map((p: Pin) => ({
+                    ...p,
+                    color:
+                      getAwareness(k, provider.current)?.user.color ??
+                      PinColor.enabled,
+                  }))
+                )
+              : ps)
+        );
+        setPins(ps);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,22 +155,50 @@ export function Home({ vertexEnv }: Props): JSX.Element {
                 yCamera.current.set("camera", cam);
               }
             }}
-            onSelect={(hit) => {
-              const sceneItemId = hit?.itemId?.hex;
+            onSelect={async ({ detail: { buttons, position }, hit }) => {
+              const itemId = hit?.itemId?.hex;
               console.debug({
                 hitNormal: hit?.hitNormal,
                 hitPoint: hit?.hitPoint,
-                sceneItemId,
+                sceneItemId: itemId,
                 sceneItemSuppliedId: hit?.itemSuppliedId?.value,
               });
               if (clientId == null) return;
 
               const cId = clientId.toString();
-              if (ySelection.current.get(cId)?.selectItemId != sceneItemId) {
-                ySelection.current.set(cId, { selectItemId: sceneItemId });
+              const cur = yModel.current.get(cId);
+              if (pinsEnabled) {
+                if (
+                  itemId != null &&
+                  buttons !== 2 &&
+                  position != null &&
+                  viewer.ref.current?.frame?.dimensions != null
+                ) {
+                  const db = await viewer.ref.current?.frame?.depthBuffer();
+                  if (db != null) {
+                    const rect = viewer.ref.current?.getBoundingClientRect();
+                    const worldPosition = new Viewport(
+                      rect.width,
+                      rect.height
+                    ).transformPointToWorldSpace(position, db);
+                    yModel.current.set(cId, {
+                      ...cur,
+                      pins: [...(cur?.pins ?? []), { worldPosition, itemId }],
+                    });
+                  }
+                }
+              } else {
+                if (yModel.current.get(cId)?.selectItemId != itemId) {
+                  yModel.current.set(cId, { ...cur, selectItemId: itemId });
+                }
               }
             }}
-            undoSelection={undoSelection}
+            pins={pins}
+            pinTool={{
+              enabled: pinsEnabled,
+              onClick: () => setPinsEnabled(!pinsEnabled),
+            }}
+            undoManager={undoManager}
             viewer={viewer.ref}
           />
         )
@@ -175,7 +221,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     >
       {dialogOpen && (
         <JoinDialog
-          onSave={(mn: string, n: string, c: string) => {
+          onJoin={(mn: string, n: string, c: string) => {
             setMeetingName(mn);
             setUserData({ color: c, name: n });
             setDialogOpen(false);
@@ -185,4 +231,11 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       )}
     </Layout>
   );
+}
+
+function getAwareness(
+  key: string,
+  provider?: WebrtcProvider
+): Awareness | undefined {
+  return provider?.awareness.states.get(parseInt(key, 10)) as Awareness;
 }

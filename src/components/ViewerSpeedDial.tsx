@@ -1,15 +1,39 @@
+/* @jsx jsx */ /** @jsxRuntime classic */ import { jsx } from "@emotion/react";
 import { Redo, Undo, ZoomOutMap } from "@mui/icons-material";
 import { SpeedDial, SpeedDialAction } from "@mui/material";
+import { Vector3 } from "@vertexvis/geometry";
+import { VertexIcon } from "@vertexvis/ui-react";
 import * as Y from "yjs";
 
 import { Action, AnimationDurationMs } from "./Viewer";
 
 interface Props {
-  readonly undoSelection: React.MutableRefObject<Y.UndoManager | null>;
+  readonly pinTool: PinToolProps;
+  readonly undoManager: React.MutableRefObject<Y.UndoManager | null>;
   readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
 }
 
-export function ViewerSpeedDial({ undoSelection, viewer }: Props): JSX.Element {
+export interface Pin {
+  color: string;
+  worldPosition: Vector3.Vector3;
+  itemId: string;
+}
+
+export interface PinToolProps {
+  enabled: boolean;
+  onClick: VoidFunction;
+}
+
+export const PinColor = {
+  enabled: "rgba(0, 0, 255, 0.6)",
+  disabled: "rgba(0, 0, 0, 0.6)",
+};
+
+export function ViewerSpeedDial({
+  pinTool: { enabled, onClick },
+  undoManager,
+  viewer,
+}: Props): JSX.Element {
   const actions: Action[] = [
     {
       icon: <ZoomOutMap />,
@@ -18,7 +42,7 @@ export function ViewerSpeedDial({ undoSelection, viewer }: Props): JSX.Element {
     },
   ];
 
-  if (undoSelection.current) {
+  if (undoManager.current) {
     actions.push(
       {
         icon: <Redo />,
@@ -34,15 +58,15 @@ export function ViewerSpeedDial({ undoSelection, viewer }: Props): JSX.Element {
   }
 
   function redo(): void {
-    if (undoSelection.current == null) return;
+    if (undoManager.current == null) return;
 
-    undoSelection.current.redo();
+    undoManager.current.redo();
   }
 
   function undo(): void {
-    if (undoSelection.current == null) return;
+    if (undoManager.current == null) return;
 
-    undoSelection.current.undo();
+    undoManager.current.undo();
   }
 
   async function fitAll(): Promise<void> {
@@ -59,6 +83,19 @@ export function ViewerSpeedDial({ undoSelection, viewer }: Props): JSX.Element {
       open={true}
       sx={{ mr: 3, mb: 2 }}
     >
+      <SpeedDialAction
+        color="primary"
+        FabProps={{ color: "primary" }}
+        key="Add Pin"
+        icon={
+          <VertexIcon
+            css={{ color: enabled ? PinColor.enabled : PinColor.disabled }}
+            name="pin-line"
+          />
+        }
+        tooltipTitle="Add Pin"
+        onClick={() => onClick()}
+      />
       {actions.map((action) => (
         <SpeedDialAction
           key={action.name}

@@ -12,7 +12,7 @@ import { randomColor } from "../lib/colors";
 
 interface Props {
   readonly open: boolean;
-  readonly onSave: (meetingName: string, name: string, color: string) => void;
+  readonly onJoin: (meetingName: string, name: string, color: string) => void;
 }
 
 interface Value {
@@ -21,7 +21,7 @@ interface Value {
 
 const color = randomColor();
 
-export function JoinDialog({ open, onSave }: Props): JSX.Element {
+export function JoinDialog({ open, onJoin }: Props): JSX.Element {
   const [meetingName, setMeetingName] = React.useState<string>("");
   const [name, setName] = React.useState<string>("");
 
@@ -33,8 +33,8 @@ export function JoinDialog({ open, onSave }: Props): JSX.Element {
     setMeetingName(e.target.value);
   }
 
-  function handleSave(): void {
-    if (name !== "" && meetingName !== "") onSave(meetingName, name, color);
+  function handleJoin(): void {
+    if (name !== "" && meetingName !== "") onJoin(meetingName, name, color);
   }
 
   return (
@@ -62,7 +62,7 @@ export function JoinDialog({ open, onSave }: Props): JSX.Element {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSave}>Save</Button>
+        <Button onClick={handleJoin}>Join</Button>
       </DialogActions>
     </Dialog>
   );

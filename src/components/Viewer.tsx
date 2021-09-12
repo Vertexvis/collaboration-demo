@@ -1,9 +1,12 @@
 /* @jsx jsx */ /** @jsxRuntime classic */ import { jsx } from "@emotion/react";
 import { vertexvis } from "@vertexvis/frame-streaming-protos";
+import { VertexIcon } from "@vertexvis/ui-react";
 import type { TapEventDetails } from "@vertexvis/viewer";
 import {
   JSX as ViewerJSX,
   VertexViewer,
+  VertexViewerDomElement,
+  VertexViewerDomRenderer,
   VertexViewerToolbar,
   VertexViewerViewCube,
 } from "@vertexvis/viewer-react";
@@ -11,18 +14,25 @@ import React from "react";
 import * as Y from "yjs";
 
 import { StreamCredentials } from "../lib/config";
-import { ViewerSpeedDial } from "./ViewerSpeedDial";
+import {
+  Pin,
+  PinColor,
+  PinToolProps,
+  ViewerSpeedDial,
+} from "./ViewerSpeedDial";
 
 interface ViewerProps extends ViewerJSX.VertexViewer {
   readonly credentials: StreamCredentials;
-  readonly undoSelection: React.MutableRefObject<Y.UndoManager | null>;
+  readonly pins: Pin[];
+  readonly pinTool: PinToolProps;
+  readonly undoManager: React.MutableRefObject<Y.UndoManager | null>;
   readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
 }
 
 export interface Action {
-  icon: React.ReactNode;
-  name: string;
-  onClick: () => void;
+  readonly icon: React.ReactNode;
+  readonly name: string;
+  readonly onClick: () => void;
 }
 
 type ViewerComponentType = React.ComponentType<
@@ -32,7 +42,10 @@ type ViewerComponentType = React.ComponentType<
 type HOCViewerProps = React.RefAttributes<HTMLVertexViewerElement>;
 
 interface OnSelectProps extends HOCViewerProps {
-  readonly onSelect: (hit?: vertexvis.protobuf.stream.IHit) => void;
+  readonly onSelect: (hit: {
+    detail: TapEventDetails;
+    hit?: vertexvis.protobuf.stream.IHit;
+  }) => void;
 }
 
 export const AnimationDurationMs = 1500;
@@ -40,18 +53,38 @@ export const Viewer = onTap(UnwrappedViewer);
 
 function UnwrappedViewer({
   credentials,
-  undoSelection,
+  pinTool,
+  pins,
+  undoManager,
   viewer,
   ...props
 }: ViewerProps): JSX.Element {
   return (
     <VertexViewer
       clientId={credentials.clientId}
-      css={{ height: "100%", width: "100%" }}
+      css={{
+        height: "100%",
+        width: "100%",
+        cursor: pinTool.enabled ? "url(/pin.svg) 12 12, crosshair;" : "default",
+      }}
+      depthBuffers={pinTool.enabled ? "all" : undefined}
       ref={viewer}
       src={`urn:vertexvis:stream-key:${credentials.streamKey}`}
       {...props}
     >
+      <VertexViewerDomRenderer drawMode="2d" id="viewer-pin-renderer">
+        {pins.map(({ color, worldPosition }, i) => (
+          <VertexViewerDomElement
+            key={i}
+            positionJson={JSON.stringify(worldPosition)}
+          >
+            <VertexIcon
+              css={{ color: color ?? PinColor.enabled }}
+              name="pin-fill"
+            ></VertexIcon>
+          </VertexViewerDomElement>
+        ))}
+      </VertexViewerDomRenderer>
       <VertexViewerToolbar placement="top-right">
         <VertexViewerViewCube
           css={{ marginRight: "32px" }}
@@ -60,7 +93,11 @@ function UnwrappedViewer({
         />
       </VertexViewerToolbar>
       <VertexViewerToolbar placement="bottom-right">
-        <ViewerSpeedDial undoSelection={undoSelection} viewer={viewer} />
+        <ViewerSpeedDial
+          pinTool={pinTool}
+          undoManager={undoManager}
+          viewer={viewer}
+        />
       </VertexViewerToolbar>
     </VertexViewer>
   );
@@ -80,7 +117,8 @@ function onTap<P extends ViewerProps>(
         if (raycaster != null) {
           const res = await raycaster.hitItems(e.detail.position);
           const hit = (res?.hits ?? [])[0];
-          onSelect(hit);
+
+          onSelect({ detail: e.detail, hit });
         }
       }
     }
