@@ -44,7 +44,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
           />
           <meta
             name="description"
-            content="Quickly and easily build your own digital twin prototype application using the Vertex platform."
+            content="Use the Vertex platform along with open-source software to enable real-time 3D model collaboration."
           />
         </Head>
         <ThemeProvider theme={theme}>

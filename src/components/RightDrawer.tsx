@@ -65,6 +65,18 @@ export function RightDrawer({
       }}
       variant="persistent"
     >
+      <Box sx={{ mx: 2, mt: 2 }}>
+        <Typography sx={{ mb: 2 }} variant="body2">
+          The Vertex Collaboration demo shows how to use the Vertex platform
+          along with open-source software to enable real-time 3D model
+          collaboration.
+        </Typography>
+        <Typography variant="body2">
+          Open a new browser tab or window and join the same meeting. Selection
+          and pins sync between participants. Each participant may also click
+          the play button to sync camera control.
+        </Typography>
+      </Box>
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Title>Participants</Title>
