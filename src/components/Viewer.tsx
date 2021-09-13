@@ -59,8 +59,6 @@ function UnwrappedViewer({
   viewer,
   ...props
 }: ViewerProps): JSX.Element {
-  console.log("pins", pins);
-
   return (
     <VertexViewer
       clientId={credentials.clientId}

@@ -52,7 +52,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     if (!router.isReady) return;
 
     setMeeting(head(router.query.meeting));
-    console.log("updated");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
 
@@ -169,7 +168,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
             }
           : { pins: [] };
       });
-      console.log("Setting model state");
       setModel(newModel);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
