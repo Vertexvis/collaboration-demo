@@ -65,7 +65,7 @@ export function RightDrawer({
       }}
       variant="persistent"
     >
-      <Box sx={{ mx: 2, mt: 2 }}>
+      <Box sx={{ mx: 2, my: 2 }}>
         <Typography sx={{ mb: 2 }} variant="body2">
           The Vertex Collaboration demo shows how to use the Vertex platform
           along with open-source software to enable real-time 3D model
