@@ -11,8 +11,9 @@ import React from "react";
 import { randomColor } from "../lib/colors";
 
 interface Props {
+  readonly meeting?: string;
   readonly open: boolean;
-  readonly onJoin: (meetingName: string, name: string, color: string) => void;
+  readonly onJoin: (mName: string, name: string, color: string) => void;
 }
 
 interface Value {
@@ -21,20 +22,27 @@ interface Value {
 
 const color = randomColor();
 
-export function JoinDialog({ open, onJoin }: Props): JSX.Element {
-  const [meetingName, setMeetingName] = React.useState<string>("");
+export function JoinDialog({ meeting, open, onJoin }: Props): JSX.Element {
+  const [mName, setMName] = React.useState<string>("");
   const [name, setName] = React.useState<string>("");
+
+  React.useEffect(() => {
+    if (!meeting) return;
+
+    setMName(meeting);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [meeting]);
 
   function handleNameChange(e: React.ChangeEvent<Value>): void {
     setName(e.target.value);
   }
 
   function handleMeetingNameChange(e: React.ChangeEvent<Value>): void {
-    setMeetingName(e.target.value);
+    setMName(e.target.value);
   }
 
   function handleJoin(): void {
-    if (name !== "" && meetingName !== "") onJoin(meetingName, name, color);
+    if (name !== "" && mName !== "") onJoin(mName, name, color);
   }
 
   return (
@@ -42,16 +50,17 @@ export function JoinDialog({ open, onJoin }: Props): JSX.Element {
       <DialogTitle>Join Meeting</DialogTitle>
       <DialogContent>
         <TextField
-          autoFocus
+          autoFocus={!meeting}
           fullWidth
           label="Meeting name"
           margin="normal"
           onChange={handleMeetingNameChange}
           required
           size="small"
-          value={meetingName}
+          value={mName}
         />
         <TextField
+          autoFocus={!!meeting}
           fullWidth
           label="Name"
           margin="normal"

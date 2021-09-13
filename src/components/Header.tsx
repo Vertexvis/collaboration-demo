@@ -2,15 +2,15 @@ import { Box, Link, Typography } from "@mui/material";
 import React from "react";
 
 interface Props {
-  readonly meetingName?: string;
+  readonly meeting?: string;
 }
 
-export function Header({ meetingName }: Props): JSX.Element {
+export function Header({ meeting }: Props): JSX.Element {
   return (
     <Box
       sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
     >
-      <Typography variant="body2">{meetingName ?? ""}</Typography>
+      <Typography variant="body2">{meeting ?? ""}</Typography>
       <Link
         href="https://github.com/Vertexvis/collaboration-demo"
         rel="noreferrer"
