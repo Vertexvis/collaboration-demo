@@ -26,12 +26,16 @@ interface State {
 
 type Model = Record<string, State>;
 
+const CameraKey = "camera";
+const CameraControllerKey = "cameraController";
+const CredentialsKey = "credentials";
+
 export function Home({ vertexEnv }: Props): JSX.Element {
   const router = useRouter();
   const viewer = useViewer();
   const provider = React.useRef<WebrtcProvider>();
   const yDoc = React.useRef(new Y.Doc());
-  const yCamera = React.useRef(yDoc.current.getMap("camera"));
+  const yConfig = React.useRef(yDoc.current.getMap("config"));
   const yModel = React.useRef(yDoc.current.getMap("model"));
   const undoManager = React.useRef(new Y.UndoManager(yModel.current));
 
@@ -80,6 +84,9 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           viewer: viewer.ref.current,
         });
         delete newModel[r];
+
+        const cc = yConfig.current.get(CameraControllerKey);
+        if (cc === r) yConfig.current.set(CameraControllerKey, null);
       })
     );
     setModel(newModel);
@@ -113,15 +120,33 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       }
     });
 
-    yCamera.current.observe(() => {
-      const cc = yCamera.current.get("cameraController");
-      setCameraController(cc);
-      if (cc !== provider.current?.awareness.clientID) {
-        updateCamera({
-          camera: yCamera.current.get("camera"),
-          viewer: viewer.ref.current,
-        });
-      }
+    yConfig.current.observe((e) => {
+      e.changes.keys.forEach(({ action, oldValue }, key) => {
+        const cur = yConfig.current.get(key);
+        console.debug(
+          `${action}, new=${JSON.stringify(cur)}, old=${JSON.stringify(
+            oldValue
+          )}`
+        );
+        switch (key) {
+          case CameraKey:
+            if (
+              yConfig.current.get(CameraControllerKey) !==
+              provider.current?.awareness.clientID
+            ) {
+              updateCamera({ camera: cur, viewer: viewer.ref.current });
+            }
+            break;
+          case CameraControllerKey:
+            setCameraController(cur);
+            break;
+          case CredentialsKey:
+            break;
+          default:
+            console.warn(`Unknown key: ${key}`);
+            break;
+        }
+      });
     });
 
     yModel.current.observe((e) => {
@@ -186,9 +211,9 @@ export function Home({ vertexEnv }: Props): JSX.Element {
               const cam = { lookAt, position, up };
               if (
                 cameraController === provider.current?.awareness.clientID &&
-                !equal(cam, yCamera.current.get("camera"))
+                !equal(cam, yConfig.current.get(CameraKey))
               ) {
-                yCamera.current.set("camera", cam);
+                yConfig.current.set(CameraKey, cam);
               }
             }}
             onSelect={async ({ detail: { buttons, position }, hit }) => {
@@ -247,8 +272,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           cameraController={cameraController ?? undefined}
           clientId={clientId?.toString()}
           onCameraController={(control) =>
-            yCamera.current.set(
-              "cameraController",
+            yConfig.current.set(
+              CameraControllerKey,
               control ? provider.current?.awareness.clientID : null
             )
           }
