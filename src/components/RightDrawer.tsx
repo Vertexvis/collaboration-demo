@@ -72,9 +72,9 @@ export function RightDrawer({
           collaboration.
         </Typography>
         <Typography variant="body2">
-          Open a new browser tab or window and join the same meeting. Selection
-          and pins sync between participants. Each participant may also click
-          the play button to sync camera control.
+          Open a new browser tab or window and join the same liveSession.
+          Selection and pins sync between participants. Each participant may
+          also click the play button to sync camera control.
         </Typography>
       </Box>
       <Accordion defaultExpanded>

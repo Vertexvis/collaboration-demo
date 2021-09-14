@@ -14,61 +14,56 @@ import React from "react";
 import { randomColor } from "../lib/colors";
 
 interface Props {
-  readonly meeting?: string;
+  readonly liveSession?: string;
   readonly open: boolean;
-  readonly onJoin: (mName: string, name: string, color: string) => void;
+  readonly onJoin: (session: string, name: string, color: string) => void;
 }
 
 interface Value {
   value: string;
 }
 
-export function JoinDialog({ meeting, open, onJoin }: Props): JSX.Element {
-  const [mName, setMName] = React.useState("");
+export function JoinDialog({ liveSession, open, onJoin }: Props): JSX.Element {
+  const [session, setSession] = React.useState("");
   const [name, setName] = React.useState("");
   const [color, setColor] = React.useState(randomColor());
 
   React.useEffect(() => {
-    if (!meeting) return;
+    if (!liveSession) return;
 
-    setMName(meeting);
+    setSession(liveSession);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meeting]);
+  }, [liveSession]);
 
   function handleNameChange(e: React.ChangeEvent<Value>): void {
     setName(e.target.value);
   }
 
-  function handleMeetingNameChange(e: React.ChangeEvent<Value>): void {
-    setMName(e.target.value);
+  function handleLiveSessionNameChange(e: React.ChangeEvent<Value>): void {
+    setSession(e.target.value);
   }
 
   function handleJoin(): void {
-    if (name !== "" && mName !== "") onJoin(mName, name, color);
+    if (name !== "" && session !== "") onJoin(session, name, color);
   }
 
   return (
     <Dialog fullWidth maxWidth="md" open={open}>
-      <DialogTitle>Join Meeting</DialogTitle>
+      <DialogTitle>Join Session</DialogTitle>
       <DialogContent>
         <TextField
-          autoFocus={!meeting}
+          autoFocus={!liveSession}
           fullWidth
-          label="Meeting name"
+          label="Session name"
           margin="normal"
-          onChange={handleMeetingNameChange}
+          onChange={handleLiveSessionNameChange}
           required
           size="small"
-          value={mName}
+          value={session}
         />
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <TextField
-            autoFocus={!!meeting}
+            autoFocus={!!liveSession}
             fullWidth
             label="Name"
             margin="normal"

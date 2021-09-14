@@ -2,11 +2,11 @@ import { Box, Button, Link, Typography } from "@mui/material";
 import React from "react";
 
 interface Props {
-  readonly meeting?: string;
+  readonly liveSession?: string;
   readonly onOpenSceneClick: () => void;
 }
 
-export function Header({ meeting, onOpenSceneClick }: Props): JSX.Element {
+export function Header({ liveSession, onOpenSceneClick }: Props): JSX.Element {
   return (
     <Box
       sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
@@ -15,7 +15,7 @@ export function Header({ meeting, onOpenSceneClick }: Props): JSX.Element {
         Open Scene
       </Button>
       <Typography variant="body2" sx={{ alignSelf: "center" }}>
-        {meeting ?? ""}
+        {liveSession ?? ""}
       </Typography>
       <Link
         href="https://github.com/Vertexvis/collaboration-demo"

@@ -43,11 +43,11 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const yModel = React.useRef(yDoc.current.getMap("model"));
   const undoManager = React.useRef(new Y.UndoManager(yModel.current));
 
-  const [meeting, setMeeting] = React.useState<string>();
+  const [liveSession, setLiveSession] = React.useState<string>();
   const [userData, setUserData] = React.useState<UserData>();
   const [openSceneDialogOpen, setOpenSceneDialogOpen] = React.useState(false);
   const [joinDialogOpen, setJoinDialogOpen] = React.useState(
-    !userData || !meeting
+    !userData || !liveSession
   );
   const [initialized, setInitialized] = React.useState(false);
   const [cameraController, setCameraController] = React.useState<string>();
@@ -62,16 +62,16 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   React.useEffect(() => {
     if (!router.isReady) return;
 
-    setMeeting(head(router.query.meeting));
+    setLiveSession(head(router.query.liveSession));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
 
   React.useEffect(() => {
-    if (!meeting) return;
+    if (!liveSession) return;
 
-    router.push(`/?meeting=${encodeURIComponent(meeting)}`);
+    router.push(`/?liveSession=${encodeURIComponent(liveSession)}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meeting]);
+  }, [liveSession]);
 
   useHotkeys("o", () => setOpenSceneDialogOpen(true), { keyup: true });
 
@@ -103,12 +103,17 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   }, [awareness, model]);
 
   React.useEffect(() => {
-    if (!meeting || !userData || initialized || provider.current?.connected) {
+    if (
+      !liveSession ||
+      !userData ||
+      initialized ||
+      provider.current?.connected
+    ) {
       return;
     }
 
     setInitialized(true);
-    provider.current = new WebrtcProvider(meeting, yDoc.current);
+    provider.current = new WebrtcProvider(liveSession, yDoc.current);
 
     const cId = provider.current?.awareness.clientID;
     const localA: Awareness = { user: { ...userData, clientId: cId } };
@@ -206,13 +211,13 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       setModel(newModel);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [awareness, initialized, meeting, userData]);
+  }, [awareness, initialized, liveSession, userData]);
 
   return router.isReady ? (
     <Layout
       header={
         <Header
-          meeting={meeting}
+          liveSession={liveSession}
           onOpenSceneClick={() => setOpenSceneDialogOpen(true)}
         />
       }
@@ -300,9 +305,9 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     >
       {joinDialogOpen && (
         <JoinDialog
-          meeting={meeting}
+          liveSession={liveSession}
           onJoin={(mn: string, n: string, c: string) => {
-            setMeeting(mn);
+            setLiveSession(mn);
             setUserData({ color: c, name: n });
             setJoinDialogOpen(false);
           }}
