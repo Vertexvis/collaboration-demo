@@ -1,4 +1,6 @@
+/* @jsx jsx */ /** @jsxRuntime classic */ import { jsx } from "@emotion/react";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -6,6 +8,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+import { VertexColorPicker } from "@vertexvis/ui-react";
 import React from "react";
 
 import { randomColor } from "../lib/colors";
@@ -20,11 +23,10 @@ interface Value {
   value: string;
 }
 
-const color = randomColor();
-
 export function JoinDialog({ meeting, open, onJoin }: Props): JSX.Element {
-  const [mName, setMName] = React.useState<string>("");
-  const [name, setName] = React.useState<string>("");
+  const [mName, setMName] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [color, setColor] = React.useState(randomColor());
 
   React.useEffect(() => {
     if (!meeting) return;
@@ -59,16 +61,28 @@ export function JoinDialog({ meeting, open, onJoin }: Props): JSX.Element {
           size="small"
           value={mName}
         />
-        <TextField
-          autoFocus={!!meeting}
-          fullWidth
-          label="Name"
-          margin="normal"
-          onChange={handleNameChange}
-          required
-          size="small"
-          value={name}
-        />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <TextField
+            autoFocus={!!meeting}
+            fullWidth
+            label="Name"
+            margin="normal"
+            onChange={handleNameChange}
+            required
+            size="small"
+            value={name}
+          />
+          <VertexColorPicker
+            css={{ marginTop: "10px", marginLeft: "10px" }}
+            value={color}
+            onValueChanged={(e) => setColor(e.detail)}
+          />
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleJoin}>Join</Button>
