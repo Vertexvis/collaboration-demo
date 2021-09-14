@@ -2,15 +2,17 @@ import { Environment, Viewport } from "@vertexvis/viewer";
 import equal from "fast-deep-equal/es6/react";
 import { useRouter } from "next/router";
 import React from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 
-import { DefaultCredentials, head } from "../lib/config";
+import { DefaultCredentials, head, StreamCredentials } from "../lib/config";
 import { selectByItemId, updateCamera } from "../lib/scene-items";
 import { useViewer } from "../lib/viewer";
 import { Header } from "./Header";
 import { JoinDialog } from "./JoinDialog";
 import { Layout, RightDrawerWidth } from "./Layout";
+import { OpenDialog } from "./OpenScene";
 import { Awareness, RightDrawer, UserData } from "./RightDrawer";
 import { Viewer } from "./Viewer";
 import { Pin } from "./ViewerSpeedDial";
@@ -33,6 +35,8 @@ const CredentialsKey = "credentials";
 export function Home({ vertexEnv }: Props): JSX.Element {
   const router = useRouter();
   const viewer = useViewer();
+  const [credentials, setCredentials] =
+    React.useState<StreamCredentials>(DefaultCredentials);
   const provider = React.useRef<WebrtcProvider>();
   const yDoc = React.useRef(new Y.Doc());
   const yConfig = React.useRef(yDoc.current.getMap("config"));
@@ -41,7 +45,10 @@ export function Home({ vertexEnv }: Props): JSX.Element {
 
   const [meeting, setMeeting] = React.useState<string>();
   const [userData, setUserData] = React.useState<UserData>();
-  const [dialogOpen, setDialogOpen] = React.useState(!userData || !meeting);
+  const [openSceneDialogOpen, setOpenSceneDialogOpen] = React.useState(false);
+  const [joinDialogOpen, setJoinDialogOpen] = React.useState(
+    !userData || !meeting
+  );
   const [initialized, setInitialized] = React.useState(false);
   const [cameraController, setCameraController] = React.useState<string>();
   const [clientId, setClientId] = React.useState<number>();
@@ -65,6 +72,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     router.push(`/?meeting=${encodeURIComponent(meeting)}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meeting]);
+
+  useHotkeys("o", () => setOpenSceneDialogOpen(true), { keyup: true });
 
   React.useEffect(() => {
     if (prevAwareness == null) return;
@@ -141,6 +150,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
             setCameraController(cur);
             break;
           case CredentialsKey:
+            setCredentials(cur);
             break;
           default:
             console.warn(`Unknown key: ${key}`);
@@ -200,12 +210,17 @@ export function Home({ vertexEnv }: Props): JSX.Element {
 
   return router.isReady ? (
     <Layout
-      header={<Header meeting={meeting} />}
+      header={
+        <Header
+          meeting={meeting}
+          onOpenSceneClick={() => setOpenSceneDialogOpen(true)}
+        />
+      }
       main={
         viewer.isReady && (
           <Viewer
             configEnv={vertexEnv}
-            credentials={DefaultCredentials}
+            credentials={credentials}
             onFrameDrawn={(e) => {
               const { lookAt, position, up } = e.detail.scene.camera;
               const cam = { lookAt, position, up };
@@ -283,15 +298,26 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       }
       rightDrawerWidth={RightDrawerWidth}
     >
-      {dialogOpen && (
+      {joinDialogOpen && (
         <JoinDialog
           meeting={meeting}
           onJoin={(mn: string, n: string, c: string) => {
             setMeeting(mn);
             setUserData({ color: c, name: n });
-            setDialogOpen(false);
+            setJoinDialogOpen(false);
           }}
-          open={dialogOpen}
+          open={joinDialogOpen}
+        />
+      )}
+      {openSceneDialogOpen && (
+        <OpenDialog
+          credentials={credentials}
+          onClose={() => setOpenSceneDialogOpen(false)}
+          onConfirm={(cs) => {
+            yConfig.current?.set(CredentialsKey, cs);
+            setOpenSceneDialogOpen(false);
+          }}
+          open={openSceneDialogOpen}
         />
       )}
     </Layout>

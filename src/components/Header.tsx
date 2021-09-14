@@ -1,20 +1,26 @@
-import { Box, Link, Typography } from "@mui/material";
+import { Box, Button, Link, Typography } from "@mui/material";
 import React from "react";
 
 interface Props {
   readonly meeting?: string;
+  readonly onOpenSceneClick: () => void;
 }
 
-export function Header({ meeting }: Props): JSX.Element {
+export function Header({ meeting, onOpenSceneClick }: Props): JSX.Element {
   return (
     <Box
       sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
     >
-      <Typography variant="body2">{meeting ?? ""}</Typography>
+      <Button onClick={() => onOpenSceneClick()} variant="contained">
+        Open Scene
+      </Button>
+      <Typography variant="body2" sx={{ alignSelf: "center" }}>
+        {meeting ?? ""}
+      </Typography>
       <Link
         href="https://github.com/Vertexvis/collaboration-demo"
         rel="noreferrer"
-        style={{ alignSelf: "center" }}
+        sx={{ alignSelf: "center" }}
         target="_blank"
       >
         View on GitHub
