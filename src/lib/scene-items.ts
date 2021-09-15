@@ -35,21 +35,24 @@ export async function selectByItemId({
   if (scene == null) return;
 
   if (selectItemId != null || deselectItemId != null) {
-    await scene
-      .items((op) => {
-        const de = deselectItemId
-          ? [op.where((q) => q.withItemId(deselectItemId)).deselect()]
-          : [];
-        const se = selectItemId
-          ? [
-              op
-                .where((q) => q.withItemId(selectItemId))
-                .select(createSelectColor(color)),
-            ]
-          : [];
-        return [...de, ...se];
-      })
-      .execute();
+    try {
+      await scene
+        .items((op) => [
+          ...(deselectItemId
+            ? [op.where((q) => q.withItemId(deselectItemId)).deselect()]
+            : []),
+          ...(selectItemId
+            ? [
+                op
+                  .where((q) => q.withItemId(selectItemId))
+                  .select(createSelectColor(color)),
+              ]
+            : []),
+        ])
+        .execute();
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
@@ -62,5 +65,9 @@ export async function updateCamera({
   const scene = await viewer.scene();
   if (scene == null || camera == null) return;
 
-  await scene.camera().update(camera).render();
+  try {
+    await scene.camera().update(camera).render();
+  } catch (e) {
+    console.log(e);
+  }
 }

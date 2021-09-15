@@ -62,14 +62,14 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   React.useEffect(() => {
     if (!router.isReady) return;
 
-    setLiveSession(head(router.query.liveSession));
+    setLiveSession(head(router.query.session));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
 
   React.useEffect(() => {
     if (!liveSession) return;
 
-    router.push(`/?liveSession=${encodeURIComponent(liveSession)}`);
+    router.push(`/?session=${encodeURIComponent(liveSession)}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [liveSession]);
 
@@ -320,6 +320,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           onClose={() => setOpenSceneDialogOpen(false)}
           onConfirm={(cs) => {
             yConfig.current?.set(CredentialsKey, cs);
+            yModel.current.clear();
             setOpenSceneDialogOpen(false);
           }}
           open={openSceneDialogOpen}
