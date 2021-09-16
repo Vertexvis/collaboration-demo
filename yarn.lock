@@ -422,85 +422,85 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.3.1.tgz#b50a781709c81e10701004214340f25475a171a0"
   integrity sha512-zMM9Ds+SawiUkakS7y94Ymqx+S0ORzpG3frZirN3l+UlXUmSUR7hF4wxCVqW+ei94JzV5kt0uXBcoOEAuiydrw==
 
-"@mui/core@5.0.0-alpha.46":
-  version "5.0.0-alpha.46"
-  resolved "https://registry.yarnpkg.com/@mui/core/-/core-5.0.0-alpha.46.tgz#f4c0e5b2ad346e31e74bb96b684f6734b55cc9e6"
-  integrity sha512-LZa0s450YSHv58xlMRIWszE0zsqqTyxgP+l70gUyPvYwCfQErkxsvRjEInKI5GCrYDcr3N+jlKJ5MSRZDvtvig==
+"@mui/core@5.0.0-alpha.47":
+  version "5.0.0-alpha.47"
+  resolved "https://registry.yarnpkg.com/@mui/core/-/core-5.0.0-alpha.47.tgz#68d044a5e81fa0f752b8c8a7b40deec04925beab"
+  integrity sha512-/GCIWOq+ydeY8HTWexrvQw7OsmRRvdzW+BB4vQ+V6alaECKSXPQrTDuQtd+lgI2il4p7uhPIKIqjcaAZ/FaNHA==
   dependencies:
     "@babel/runtime" "^7.14.8"
     "@emotion/is-prop-valid" "^1.1.0"
-    "@mui/utils" "5.0.0-rc.1"
+    "@mui/utils" "^5.0.0"
     clsx "^1.1.1"
     prop-types "^15.7.2"
     react-is "^17.0.2"
 
-"@mui/icons-material@^5.0.0-rc.1":
-  version "5.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.0.0-rc.1.tgz#ffb5ec5195d2bf8105da6a78b7d6b9fc195c8511"
-  integrity sha512-w9tfGQaND221fkPaCp70gHg/8f4mk1RYx22YBLtV4wV0SLoI3d4+41DRrqTxeyKB1WIxETDVxaAqeBthrXM6hg==
+"@mui/icons-material@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.0.0.tgz#f6282b6044d221d80729bffe976ede2072c8d313"
+  integrity sha512-Vl5pMIdD1MC+LVBEKDQkWeoU/0mdxx/WLBuTVo5y2yzOzEp8gcwkegtiUyN1gubiXcqzNNZQNvJ6/YSdFRr84Q==
   dependencies:
     "@babel/runtime" "^7.14.8"
 
-"@mui/material@^5.0.0-rc.1":
-  version "5.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.0.0-rc.1.tgz#456218bfeb659dfb17c516ecc03f86013feaf253"
-  integrity sha512-23lEM2n0Y8VcFbk7mjNZzbAHDh7wu5P4foe1hDiSJaipBX4ESWnBAwo9exxQbFrDd+l2xtLzaoTmTOVOgkElrA==
+"@mui/material@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.0.0.tgz#e5397b7778615933cabee7918230b9e7019ff1b9"
+  integrity sha512-XZNPYQocFyS2Q8Wc7PMudazKa8VDaXADK9PxUfOF6Q0GQNXjLkOn1vRWlyF9EOZQ4QLbgJHyHDlH7ELBN0CA0w==
   dependencies:
     "@babel/runtime" "^7.14.8"
-    "@mui/core" "5.0.0-alpha.46"
-    "@mui/system" "5.0.0-rc.1"
-    "@mui/types" "7.0.0-rc.1"
-    "@mui/utils" "5.0.0-rc.1"
+    "@mui/core" "5.0.0-alpha.47"
+    "@mui/system" "^5.0.0"
+    "@mui/types" "^7.0.0"
+    "@mui/utils" "^5.0.0"
     "@popperjs/core" "^2.4.4"
-    "@types/react-transition-group" "^4.2.0"
+    "@types/react-transition-group" "^4.4.2"
     clsx "^1.1.1"
     csstype "^3.0.8"
     hoist-non-react-statics "^3.3.2"
     prop-types "^15.7.2"
     react-is "^17.0.2"
-    react-transition-group "^4.4.0"
+    react-transition-group "^4.4.2"
 
-"@mui/private-theming@5.0.0-rc.1":
-  version "5.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@mui/private-theming/-/private-theming-5.0.0-rc.1.tgz#eab6d20db119b6f2176d76ed725f53b9ebc12e97"
-  integrity sha512-dibj1bc+tX4+sKOhSAYoJVndk7MAVZkYLKRa3E3GDObDe5I/YOv0fS8cvfB3sTFiQWxbdKj//p2QJtos6o83NQ==
+"@mui/private-theming@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@mui/private-theming/-/private-theming-5.0.0.tgz#db89a0efb536bd68f258c0313ba33d2bd3a08ae4"
+  integrity sha512-xCaQss6B6EyEPxyn/vv5CwidqihrF6AJlrCYDgOAqYHtCgBhzMjWhh/n4L3jlrt4SmE+STHD2FdA8DImpEgItg==
   dependencies:
     "@babel/runtime" "^7.14.8"
-    "@mui/utils" "5.0.0-rc.1"
+    "@mui/utils" "^5.0.0"
     prop-types "^15.7.2"
 
-"@mui/styled-engine@5.0.0-rc.1":
-  version "5.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@mui/styled-engine/-/styled-engine-5.0.0-rc.1.tgz#8a0c68e88868c42944042e01e28a0d11b6caf756"
-  integrity sha512-cYK3oGHzriPqULPSy5iitupk6JbvvwVqBC1n1gxISZzm7wEsBx0hDCDhh7tgCa1B7CXdl0Ntl27PXJjtukoo/A==
+"@mui/styled-engine@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@mui/styled-engine/-/styled-engine-5.0.0.tgz#caa1e9c0dd434c3b0c5db32be0e17d8237a4b17d"
+  integrity sha512-JoZLKLB6WoXYPbMNDzz2gC8incY6zyx0dd1jFg3faOzp2NuzEremDbY/Lmo93M22cOjd3cLInoup+Wm7O05d0A==
   dependencies:
     "@babel/runtime" "^7.14.8"
     "@emotion/cache" "^11.4.0"
     prop-types "^15.7.2"
 
-"@mui/system@5.0.0-rc.1":
-  version "5.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.0.0-rc.1.tgz#24c99469b48c350802929f6097f671742be9a7f1"
-  integrity sha512-c+esT+9wZR5aNcssMHg5Wm19VdX+uyhNLLTzqAg8oW36LBeIMTfiN18GShcxnFV3faje78Nr3BhmMFn9yBunMA==
+"@mui/system@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.0.0.tgz#ed520742e417aa2b1ad34a7bbaa6ab04758305ef"
+  integrity sha512-CT5HLbQjzPZLMl5EjqY++lVuKVQKGbRNKQtOTpM2ABta6QQSTj/vARbIPYSZnwpDGUyGyzBZp2xfI3X3UNyVOg==
   dependencies:
     "@babel/runtime" "^7.14.8"
-    "@mui/private-theming" "5.0.0-rc.1"
-    "@mui/styled-engine" "5.0.0-rc.1"
-    "@mui/types" "7.0.0-rc.1"
-    "@mui/utils" "5.0.0-rc.1"
+    "@mui/private-theming" "^5.0.0"
+    "@mui/styled-engine" "^5.0.0"
+    "@mui/types" "^7.0.0"
+    "@mui/utils" "^5.0.0"
     clsx "^1.1.1"
     csstype "^3.0.8"
     prop-types "^15.7.2"
 
-"@mui/types@7.0.0-rc.1":
-  version "7.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@mui/types/-/types-7.0.0-rc.1.tgz#276090e2cd062a5e9241cf8d4ad795a4ee10eb03"
-  integrity sha512-4vYFVi8ExcC7EEuk5melw/XPG2DVPeXI/HUYnQj+3t5NESpdvLJhbbvmHH366ZWAhXR2FechYWo/cQfGIsSG8Q==
+"@mui/types@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@mui/types/-/types-7.0.0.tgz#a7398502bc9c508875aafcbe28aea599b2c3d203"
+  integrity sha512-M/tkF2pZ4uoPhZ8pnNhlVnOFtz6F3dnYKIsnj8MuXKT6d26IE2u0UjA8B0275ggN74dR9rlHG5xJt5jgDx/Ung==
 
-"@mui/utils@5.0.0-rc.1":
-  version "5.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.0.0-rc.1.tgz#8427d1117a380b8c861be9a6bbf51075e776cd63"
-  integrity sha512-FSh/zaZqfzz0Iz7/RHb2ajA/q6dfFKeNIXZCl7sZeYq9L1u8GR4IHi4n1MphLiJTco02XBw3KwME9Bqmk73LEQ==
+"@mui/utils@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.0.0.tgz#f34887968e506707d45594719202135a160b9193"
+  integrity sha512-WGikt+LTiGadqqKIGRwPVGtOUHchEEN6/af/T6nln8REkE2COY5nUirNc89ciPz1AznwZFzLtDmNkeV3NqUz2w==
   dependencies:
     "@babel/runtime" "^7.14.8"
     "@types/prop-types" "^15.7.4"
@@ -719,7 +719,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-transition-group@^4.2.0":
+"@types/react-transition-group@^4.4.2":
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.2.tgz#38890fd9db68bf1f2252b99a942998dc7877c5b3"
   integrity sha512-KibDWL6nshuOJ0fu8ll7QnV/LVTo3PzQ9aCPnRUYPfX7eZohHwLIdNHj7pftanREzHNP4/nJa8oeM73uSiavMQ==
@@ -727,9 +727,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^17.0":
-  version "17.0.20"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.20.tgz#a4284b184d47975c71658cd69e759b6bd37c3b8c"
-  integrity sha512-wWZrPlihslrPpcKyCSlmIlruakxr57/buQN1RjlIeaaTWDLtJkTtRW429MoQJergvVKc4IWBpRhWw7YNh/7GVA==
+  version "17.0.21"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.21.tgz#069c43177cd419afaab5ce26bb4e9056549f7ea6"
+  integrity sha512-GzzXCpOthOjXvrAUFQwU/svyxu658cwu00Q9ugujS4qc1zXgLFaO0kS2SLOaMWLt2Jik781yuHCWB7UcYdGAeQ==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -822,67 +822,67 @@
   resolved "https://registry.yarnpkg.com/@vertexvis/frame-streaming-protos/-/frame-streaming-protos-0.5.14.tgz#97c23acb48ea440ccf162d33c57cbd8d4990463b"
   integrity sha512-zy9YENOT0yaSPfxAKStWU84PSU1a7P/7aTTjMfpBd9mnYIuLlV7/z0T/iCt9OBzGLw/FLEhtUIlx0+cNXuMd7Q==
 
-"@vertexvis/geometry@^0.10.2-canary.7":
-  version "0.10.2-canary.7"
-  resolved "https://registry.yarnpkg.com/@vertexvis/geometry/-/geometry-0.10.2-canary.7.tgz#8f0dc11c11735b7b6367e42935164783306c02f0"
-  integrity sha512-jFTYII+EzjHfX7IFkuHmHA1Kaq3TBu4YB2QyYdP0xAr9idfFIGm3xBuxDBxOxUNi3eT6jjIuaMjKxwgSj7Mt0Q==
+"@vertexvis/geometry@^0.10.2-canary.8":
+  version "0.10.2-canary.8"
+  resolved "https://registry.yarnpkg.com/@vertexvis/geometry/-/geometry-0.10.2-canary.8.tgz#2fa394c4b65be0e6b6a46bd24dfa052199179a33"
+  integrity sha512-dqT1mTtzSm9V5Q1nfM+ZhzpJHzHp/9gnQnwxbaqmTn3OOS5zNT/4pu8vzXOzQH3uPKoXrUkTY2+7F9aq6UTX9A==
 
 "@vertexvis/scene-tree-protos@^0.1.0":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@vertexvis/scene-tree-protos/-/scene-tree-protos-0.1.3.tgz#7c8ef097ccfff6282e3bdfb33ec3028f4badaa57"
   integrity sha512-+I6v4sv0jDZpJPmTvcYMp0s6VXkFZab1EAowMm2Hk+jrqKhaWiZv8jHwklYCzpo/onAz3+E0pLCHW0v7ka2ZlQ==
 
-"@vertexvis/stream-api@^0.10.2-canary.7":
-  version "0.10.2-canary.7"
-  resolved "https://registry.yarnpkg.com/@vertexvis/stream-api/-/stream-api-0.10.2-canary.7.tgz#6374d1a2b647cadea299c4a1114ce52b707d7d47"
-  integrity sha512-GLFsoxMdIia9rd/d1rOtCgY5sUWdHpkiQ+DgjdPuAywcNWJoO9c8AyL/kyM+RgwBWjiFuGYhtxV/xH8AOorC/Q==
+"@vertexvis/stream-api@^0.10.2-canary.8":
+  version "0.10.2-canary.8"
+  resolved "https://registry.yarnpkg.com/@vertexvis/stream-api/-/stream-api-0.10.2-canary.8.tgz#6e64e15bb41af9df6a2ea354a7f2167724b34e4b"
+  integrity sha512-umS5XAKkoo7A2BkfqD4OCm+j+KGjTKdjHLoQeqcZe7pQFS1ityXIqHHHqaGrkMhbwtoJP59dD7wD7GUQH2pm3w==
   dependencies:
     "@vertexvis/frame-streaming-protos" "^0.5.14"
-    "@vertexvis/utils" "^0.10.2-canary.7"
+    "@vertexvis/utils" "^0.10.2-canary.8"
 
-"@vertexvis/ui-react@0.0.10-canary.25":
-  version "0.0.10-canary.25"
-  resolved "https://registry.yarnpkg.com/@vertexvis/ui-react/-/ui-react-0.0.10-canary.25.tgz#cc68bde01364db9944e4c60dbfa76a224a43f379"
-  integrity sha512-ENjRpY6Ky3SJkpcKayUKyUqyunzD8npE0z2JM9yAn7rLVh9C4mlb8fuefd/d75KXgyDq2pxo4RemTn/L5JtmWg==
+"@vertexvis/ui-react@0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@vertexvis/ui-react/-/ui-react-0.0.10.tgz#b8334a5872940cb03abb8a0754113089777a2558"
+  integrity sha512-liahY3bbHdx3rICE3krOK6SLx9qa6lGFhV1nVSV4uV0A28Qdn6kKP7vkuGcS3/4hMRQ/0C1hTnKz6rdQcIwnFQ==
   dependencies:
-    "@vertexvis/ui" "^0.0.10-canary.25"
+    "@vertexvis/ui" "0.0.10"
 
-"@vertexvis/ui@^0.0.10-canary.25":
-  version "0.0.10-canary.28"
-  resolved "https://registry.yarnpkg.com/@vertexvis/ui/-/ui-0.0.10-canary.28.tgz#e19f38c60c67aa1d4ade053c862f441690b7b5b0"
-  integrity sha512-E/f0ZfYfdUkHUWQWhBV9tNNPcPYVUkvfv9YAps4HsVrKtzGWJGRXK/JzNLrSgz4GRGEU1wCGhyYCNov0/wKTRQ==
+"@vertexvis/ui@0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@vertexvis/ui/-/ui-0.0.10.tgz#a0faf52c875d950df876c775e7d4f7f046e84f8b"
+  integrity sha512-ezvK6TVW2FLraQPsUbDcFHSB5ZxakCl9hWXbIQO4YsPbXsyZM/6lukcosu42xBeFILXQ42Dqh/cbV4Qoiq0Vmg==
   dependencies:
     "@popperjs/core" "^2.9.2"
 
-"@vertexvis/utils@^0.10.2-canary.7":
-  version "0.10.2-canary.7"
-  resolved "https://registry.yarnpkg.com/@vertexvis/utils/-/utils-0.10.2-canary.7.tgz#72e56ef21db09ed16e0371fdf525faadb2ba1cf2"
-  integrity sha512-uoz9qa9+5QoclcuRPncZKQ2slZqwNwm3DLDuh862vXh4smWaDJHdGXkNq5ZEONiMwkBEhnZLTQ9JiHTBGha89g==
+"@vertexvis/utils@^0.10.2-canary.8":
+  version "0.10.2-canary.8"
+  resolved "https://registry.yarnpkg.com/@vertexvis/utils/-/utils-0.10.2-canary.8.tgz#97e32020fc2093af2c510211ef655424f23d9bc4"
+  integrity sha512-8LpKHWEfekRg16kfsG1OT6kHkUJrFLbUwvco5nSvloDcuTVnlu3Nv4LrWkG7sDOQu6fVdKrQcxGcKAqWWrg1zA==
   dependencies:
     is-plain-object "^3.0.0"
     lodash.isequal "^4.5.0"
     uuid "^8.3.2"
 
 "@vertexvis/viewer-react@^0.10.2-canary.7":
-  version "0.10.2-canary.7"
-  resolved "https://registry.yarnpkg.com/@vertexvis/viewer-react/-/viewer-react-0.10.2-canary.7.tgz#ed76303f27b7a1cae5e1715a2a883b34d26fc5d3"
-  integrity sha512-ztWUjYqNn0uyebX8D4MYJgJGMn+ctpG+w+Hi8TcvKKjjZcmaFf92NzYeks1AHdYzabb8WXMkrFf+lYjTiiiAFg==
+  version "0.10.2-canary.8"
+  resolved "https://registry.yarnpkg.com/@vertexvis/viewer-react/-/viewer-react-0.10.2-canary.8.tgz#5fcf509343a0998194662a192d1e7167b5a539c8"
+  integrity sha512-NG74YWgn6GfZNb7mNOZZTHwRy8Aerxxq5Mpqw8F3ik1HruQ7cJTAZ6+nvtaKVnNXHl0euCywk86G6GCzmiJeLA==
   dependencies:
-    "@vertexvis/viewer" "^0.10.2-canary.7"
+    "@vertexvis/viewer" "^0.10.2-canary.8"
 
-"@vertexvis/viewer@^0.10.2-canary.7":
-  version "0.10.2-canary.7"
-  resolved "https://registry.yarnpkg.com/@vertexvis/viewer/-/viewer-0.10.2-canary.7.tgz#bcc8ebf1342b36393bd3d90e539e355742d8a6ba"
-  integrity sha512-r5xyip8G6ACl4PlvW1lhwZzqhpogfPA8KBu7ick2eU5W+ra5/YpplKjZypMBNdr1I5/mEhgwHlqJQZaeOezgWA==
+"@vertexvis/viewer@^0.10.2-canary.8":
+  version "0.10.2-canary.8"
+  resolved "https://registry.yarnpkg.com/@vertexvis/viewer/-/viewer-0.10.2-canary.8.tgz#b62b8398f8733f78a3ed48ac6e262a95e6009adf"
+  integrity sha512-mZMSc0iqqmvuly1uRpILnCRFUAjHBlAOh4Va0ar+j35g74XrbYEzYDpJHI0r250jbi+NCCBLnuZZbtw6PX5DAA==
   dependencies:
     "@improbable-eng/grpc-web" "^0.14.0"
     "@juggle/resize-observer" "^3.3.0"
     "@types/classnames" "^2.3.1"
     "@vertexvis/frame-streaming-protos" "^0.5.14"
-    "@vertexvis/geometry" "^0.10.2-canary.7"
+    "@vertexvis/geometry" "^0.10.2-canary.8"
     "@vertexvis/scene-tree-protos" "^0.1.0"
-    "@vertexvis/stream-api" "^0.10.2-canary.7"
-    "@vertexvis/utils" "^0.10.2-canary.7"
+    "@vertexvis/stream-api" "^0.10.2-canary.8"
+    "@vertexvis/utils" "^0.10.2-canary.8"
     "@vertexvis/web-workers" "^0.1.0"
     camel-case "^4.1.2"
     classnames "^2.3.1"
@@ -1647,9 +1647,9 @@ duplexer2@^0.1.2:
     readable-stream "^2.0.2"
 
 electron-to-chromium@^1.3.723, electron-to-chromium@^1.3.830:
-  version "1.3.838"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.838.tgz#d178b34a268c750c0444ba69e4c94d4c4fb3aa0d"
-  integrity sha512-65O6UJiyohFAdX/nc6KJ0xG/4zOn7XCO03kQNNbCeMRGxlWTLzc6Uyi0tFNQuuGWqySZJi8CD2KXPXySVYmzMA==
+  version "1.3.840"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.840.tgz#3f2a1df97015d9b1db5d86a4c6bd4cdb920adcbb"
+  integrity sha512-yRoUmTLDJnkIJx23xLY7GbSvnmDCq++NSuxHDQ0jiyDJ9YZBUGJcrdUqm+ZwZFzMbCciVzfem2N2AWiHJcWlbw==
 
 elliptic@^6.5.3:
   version "6.5.4"
@@ -2227,9 +2227,9 @@ globby@^11.0.3:
     slash "^3.0.0"
 
 google-protobuf@^3.15.7:
-  version "3.17.3"
-  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.17.3.tgz#f87595073545a77946c8f0b67c302c5f7646d700"
-  integrity sha512-OVPzcSWIAJ+d5yiHyeaLrdufQtrvaBrF4JQg+z8ynTkbO3uFcujqXszTumqg1cGsAsjkWnI+M5B1xZ19yR4Wyg==
+  version "3.18.0"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.18.0.tgz#687449d8e858305d658dc1145852c306d8222f5a"
+  integrity sha512-WlaQWRkUOo/lm9uTgNH6nk9IQt814RggWPzKBfnAVewOFzSzRUSmS1yUWRT6ixW1vS7er5p6tmLSmwzpPpmc8A==
 
 graceful-fs@^4.1.2:
   version "4.2.8"
@@ -3337,9 +3337,9 @@ prelude-ls@^1.2.1:
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
 prettier@^2.4:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.4.0.tgz#85bdfe0f70c3e777cf13a4ffff39713ca6f64cba"
-  integrity sha512-DsEPLY1dE5HF3BxCRBmD4uYZ+5DCbvatnolqTqcxEgKVZnL2kUfyu7b8pPQ5+hTBkdhU9SLUmK0/pHb07RE4WQ==
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.4.1.tgz#671e11c89c14a4cfc876ce564106c4a6726c9f5c"
+  integrity sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -3494,7 +3494,7 @@ react-refresh@0.8.3:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
-react-transition-group@^4.4.0:
+react-transition-group@^4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.2.tgz#8b59a56f09ced7b55cbd53c36768b922890d5470"
   integrity sha512-/RNYfRAMlZwDSr6z4zNKV6xu53/e2BuaBbGhbyYIXTrmgu/bGHzmqOs7mJSJBHy9Ud+ApHx3QjrkKSp1pxvlFg==

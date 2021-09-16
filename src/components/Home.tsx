@@ -86,16 +86,13 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     const newModel = JSON.parse(JSON.stringify(model));
     Promise.all(
       removed.map((r) => {
-        if (!newModel[r]) return;
-
-        selectByItemId({
-          deselectItemId: model[r].selectItemId,
-          viewer: viewer.ref.current,
-        });
-        delete newModel[r];
-
         const cc = yConfig.current.get(CameraControllerKey);
         if (cc === r) yConfig.current.set(CameraControllerKey, null);
+
+        if (!newModel[r]) return;
+        const deselectItemId = model[r].selectItemId;
+        delete newModel[r];
+        return selectByItemId({ deselectItemId, viewer: viewer.ref.current });
       })
     );
     setModel(newModel);
