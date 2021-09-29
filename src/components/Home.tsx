@@ -223,14 +223,18 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           <Viewer
             configEnv={vertexEnv}
             credentials={credentials}
-            onFrameDrawn={(e) => {
-              const { lookAt, position, up } = e.detail.scene.camera;
-              const cam = { lookAt, position, up };
+            onSceneChanged={async () => {
+              const cam = (await viewer.ref.current?.scene())?.camera();
               if (
+                cam &&
                 cameraController === provider.current?.awareness.clientID &&
                 !equal(cam, yConfig.current.get(CameraKey))
               ) {
-                yConfig.current.set(CameraKey, cam);
+                yConfig.current.set(CameraKey, {
+                  lookAt: cam.lookAt,
+                  position: cam.position,
+                  up: cam.up,
+                });
               }
             }}
             onSelect={async ({ detail: { buttons, position }, hit }) => {

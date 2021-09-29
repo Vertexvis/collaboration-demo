@@ -22,6 +22,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS, {
+        cookie_flags: "SameSite=None;Secure",
         page_path: url,
       });
     }
