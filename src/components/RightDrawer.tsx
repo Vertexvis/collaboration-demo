@@ -44,6 +44,21 @@ interface Value {
   value: string;
 }
 
+function AlwaysScrollToBottom(): JSX.Element {
+  const ref =
+    React.useRef<
+      React.MutableRefObject<React.LegacyRef<HTMLDivElement> | undefined>
+    >();
+
+  React.useEffect(() => {
+    if (ref.current == null) return;
+
+    ref.current.scrollIntoView();
+  });
+
+  return <div ref={ref} />;
+}
+
 export function RightDrawer({
   cameraController,
   clientId,
@@ -148,7 +163,7 @@ export function RightDrawer({
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Title>Chat</Title>
         </AccordionSummary>
-        <List dense disablePadding>
+        <List dense disablePadding sx={{ maxHeight: 350, overflowY: "scroll" }}>
           {messages.map((m, i) => (
             <ListItem key={i}>
               <ListItemText>
@@ -162,6 +177,7 @@ export function RightDrawer({
               </ListItemText>
             </ListItem>
           ))}
+          <AlwaysScrollToBottom />
         </List>
         <Box sx={{ display: "flex", m: 2 }}>
           <TextField
