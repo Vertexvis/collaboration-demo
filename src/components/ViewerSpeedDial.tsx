@@ -1,22 +1,15 @@
 /* @jsx jsx */ /** @jsxRuntime classic */ import { jsx } from "@emotion/react";
 import { Redo, Undo, ZoomOutMap } from "@mui/icons-material";
 import { SpeedDial, SpeedDialAction } from "@mui/material";
-import { Vector3 } from "@vertexvis/geometry";
 import { VertexIcon } from "@vertexvis/ui-react";
 import * as Y from "yjs";
 
-import { Action, AnimationDurationMs } from "./Viewer";
+import { ActionProps, AnimationDurationMs } from "./Viewer";
 
 interface Props {
   readonly pinTool: PinToolProps;
   readonly undoManager: React.MutableRefObject<Y.UndoManager | null>;
   readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
-}
-
-export interface Pin {
-  color: string;
-  worldPosition: Vector3.Vector3;
-  itemId: string;
 }
 
 export interface PinToolProps {
@@ -34,7 +27,7 @@ export function ViewerSpeedDial({
   undoManager,
   viewer,
 }: Props): JSX.Element {
-  const actions: Action[] = [
+  const actions: ActionProps[] = [
     {
       icon: <ZoomOutMap />,
       name: "Fit all",

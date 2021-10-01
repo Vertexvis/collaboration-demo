@@ -8,41 +8,41 @@ import * as Y from "yjs";
 
 import { DefaultCredentials, head, StreamCredentials } from "../lib/config";
 import { selectByItemId, updateCamera } from "../lib/scene-items";
+import { Awareness, Message, Model, State, User, UserData } from "../lib/state";
 import { useViewer } from "../lib/viewer";
 import { Header } from "./Header";
 import { JoinDialog } from "./JoinDialog";
 import { Layout, RightDrawerWidth } from "./Layout";
 import { OpenDialog } from "./OpenScene";
-import { Awareness, RightDrawer, UserData } from "./RightDrawer";
+import { RightDrawer } from "./RightDrawer";
 import { Viewer } from "./Viewer";
-import { Pin } from "./ViewerSpeedDial";
 
 export interface Props {
   readonly vertexEnv: Environment;
 }
 
-interface State {
-  selectItemId?: string;
-  pins: Pin[];
-}
-
-type Model = Record<string, State>;
-
-const CameraKey = "camera";
-const CameraControllerKey = "cameraController";
-const CredentialsKey = "credentials";
+const Keys = {
+  camera: "camera",
+  cameraController: "cameraController",
+  chat: "chat",
+  config: "config",
+  credentials: "credentials",
+  model: "model",
+};
 
 export function Home({ vertexEnv }: Props): JSX.Element {
   const router = useRouter();
   const viewer = useViewer();
-  const [credentials, setCredentials] =
-    React.useState<StreamCredentials>(DefaultCredentials);
+
   const provider = React.useRef<WebrtcProvider>();
   const yDoc = React.useRef(new Y.Doc());
-  const yConfig = React.useRef(yDoc.current.getMap("config"));
-  const yModel = React.useRef(yDoc.current.getMap("model"));
+  const yConfig = React.useRef(yDoc.current.getMap(Keys.config));
+  const yModel = React.useRef(yDoc.current.getMap(Keys.model));
+  const yChat = React.useRef(yDoc.current.getArray<Message>(Keys.chat));
   const undoManager = React.useRef(new Y.UndoManager(yModel.current));
 
+  const [credentials, setCredentials] =
+    React.useState<StreamCredentials>(DefaultCredentials);
   const [liveSession, setLiveSession] = React.useState<string>();
   const [userData, setUserData] = React.useState<UserData>();
   const [openSceneDialogOpen, setOpenSceneDialogOpen] = React.useState(false);
@@ -58,6 +58,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const [pinsEnabled, setPinsEnabled] = React.useState(false);
   const [model, setModel] = React.useState<Model>({});
   const prevAwareness = usePrevious<Record<number, Awareness>>(awareness);
+  const [sceneReady, setSceneReady] = React.useState(false);
+  const [messages, setMessages] = React.useState<Message[]>([]);
 
   React.useEffect(() => {
     if (!router.isReady) return;
@@ -86,8 +88,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     const newModel = JSON.parse(JSON.stringify(model));
     Promise.all(
       removed.map((r) => {
-        const cc = yConfig.current.get(CameraControllerKey);
-        if (cc === r) yConfig.current.set(CameraControllerKey, null);
+        const cc = yConfig.current.get(Keys.cameraController);
+        if (cc === r) yConfig.current.set(Keys.cameraController, null);
 
         if (!newModel[r]) return;
         const deselectItemId = model[r].selectItemId;
@@ -101,6 +103,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
 
   React.useEffect(() => {
     if (
+      !sceneReady ||
       !liveSession ||
       !userData ||
       initialized ||
@@ -140,18 +143,18 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           )}`
         );
         switch (key) {
-          case CameraKey:
+          case Keys.camera:
             if (
-              yConfig.current.get(CameraControllerKey) !==
+              yConfig.current.get(Keys.cameraController) !==
               provider.current?.awareness.clientID
             ) {
               updateCamera({ camera: cur, viewer: viewer.ref.current });
             }
             break;
-          case CameraControllerKey:
+          case Keys.cameraController:
             setCameraController(cur);
             break;
-          case CredentialsKey:
+          case Keys.credentials:
             setCredentials(cur);
             break;
           default:
@@ -159,6 +162,10 @@ export function Home({ vertexEnv }: Props): JSX.Element {
             break;
         }
       });
+    });
+
+    yChat.current.observe(() => {
+      setMessages(yChat.current.toArray());
     });
 
     yModel.current.observe((e) => {
@@ -208,7 +215,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       setModel(newModel);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [awareness, initialized, liveSession, userData]);
+  }, [awareness, initialized, liveSession, sceneReady, userData]);
 
   return router.isReady ? (
     <Layout
@@ -228,15 +235,16 @@ export function Home({ vertexEnv }: Props): JSX.Element {
               if (
                 cam &&
                 cameraController === provider.current?.awareness.clientID &&
-                !equal(cam, yConfig.current.get(CameraKey))
+                !equal(cam, yConfig.current.get(Keys.camera))
               ) {
-                yConfig.current.set(CameraKey, {
+                yConfig.current.set(Keys.camera, {
                   lookAt: cam.lookAt,
                   position: cam.position,
                   up: cam.up,
                 });
               }
             }}
+            onSceneReady={() => setSceneReady(true)}
             onSelect={async ({ detail: { buttons, position }, hit }) => {
               const itemId = hit?.itemId?.hex;
               console.debug({
@@ -292,12 +300,19 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         <RightDrawer
           cameraController={cameraController ?? undefined}
           clientId={clientId?.toString()}
+          messages={messages}
           onCameraController={(control) =>
             yConfig.current.set(
-              CameraControllerKey,
+              Keys.cameraController,
               control ? provider.current?.awareness.clientID : null
             )
           }
+          onSendMessage={(text) => {
+            if (!userData || !clientId) return;
+
+            const m: Message = { user: { ...userData, clientId }, text };
+            yChat.current.push([m]);
+          }}
           open
           awareness={awareness}
         />
@@ -320,7 +335,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           credentials={credentials}
           onClose={() => setOpenSceneDialogOpen(false)}
           onConfirm={(cs) => {
-            yConfig.current?.set(CredentialsKey, cs);
+            yConfig.current?.set(Keys.credentials, cs);
             yModel.current.clear();
             setOpenSceneDialogOpen(false);
           }}

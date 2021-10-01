@@ -2,6 +2,7 @@ import {
   ExpandMore,
   PlayCircleOutlined,
   ScreenShare,
+  SendOutlined,
   StopCircleOutlined,
 } from "@mui/icons-material";
 import {
@@ -12,6 +13,7 @@ import {
   IconButton,
   List,
   ListItem,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -19,40 +21,57 @@ import { drawerClasses } from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
 import React from "react";
 
+import { Awareness, Message } from "../lib/state";
+import { useKeyPress } from "../lib/useKeyPress";
 import { RightDrawerWidth } from "./Layout";
 
 interface Props {
   readonly cameraController?: string;
   readonly clientId?: string;
+  readonly messages: Message[];
   readonly onCameraController: (control: boolean) => void;
+  readonly onSendMessage: (text: string) => void;
   readonly open: boolean;
   readonly awareness: Record<number, Awareness>;
-}
-
-export interface Awareness {
-  readonly user: User;
-}
-
-export interface UserData {
-  readonly color: string;
-  readonly name: string;
-}
-
-interface User extends UserData {
-  readonly clientId: number;
 }
 
 const Title = styled((props) => <Typography variant="body2" {...props} />)(
   () => ({ textTransform: "uppercase" })
 );
 
+interface Value {
+  value: string;
+}
+
 export function RightDrawer({
   cameraController,
   clientId,
+  messages,
   onCameraController,
+  onSendMessage,
   open,
   awareness,
 }: Props): JSX.Element {
+  const [text, setText] = React.useState("");
+  const enterPressed = useKeyPress("Enter");
+
+  function handleTextChange(e: React.ChangeEvent<Value>): void {
+    setText(e.target.value);
+  }
+
+  function handleSend() {
+    if (!text) return;
+
+    onSendMessage(text);
+    setText("");
+  }
+
+  React.useEffect(() => {
+    if (!enterPressed) return;
+
+    handleSend();
+  }, [enterPressed]);
+
   return (
     <Drawer
       anchor="right"
@@ -80,7 +99,7 @@ export function RightDrawer({
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Title>Participants</Title>
         </AccordionSummary>
-        <List>
+        <List dense>
           {Object.entries(awareness).map(([k, v]) => (
             <ListItem key={k}>
               <Box
@@ -123,6 +142,39 @@ export function RightDrawer({
             </ListItem>
           ))}
         </List>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          <Title>Chat</Title>
+        </AccordionSummary>
+        <List dense disablePadding>
+          {messages.map((m, i) => (
+            <ListItem key={i}>
+              <Box
+                sx={{
+                  backgroundColor: m.user.color,
+                  borderRadius: 1,
+                  height: "1rem",
+                  mr: 1,
+                  width: "1rem",
+                }}
+              />
+              {m.user.name}: {m.text}
+            </ListItem>
+          ))}
+        </List>
+        <Box sx={{ display: "flex", m: 2 }}>
+          <TextField
+            fullWidth
+            margin="normal"
+            onChange={handleTextChange}
+            size="small"
+            value={text}
+          />
+          <IconButton sx={{ p: 2 }} onClick={handleSend} type="submit">
+            <SendOutlined color="primary" />
+          </IconButton>
+        </Box>
       </Accordion>
     </Drawer>
   );

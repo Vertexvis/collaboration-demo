@@ -29,45 +29,37 @@ export async function selectByItemId({
   selectItemId,
   viewer,
 }: SelectByHitReq): Promise<void> {
-  if (viewer == null) return;
+  if (viewer == null || (selectItemId == null && deselectItemId == null)) {
+    return;
+  }
 
   const scene = await viewer.scene();
   if (scene == null) return;
 
-  if (selectItemId != null || deselectItemId != null) {
-    try {
-      await scene
-        .items((op) => [
-          ...(deselectItemId
-            ? [op.where((q) => q.withItemId(deselectItemId)).deselect()]
-            : []),
-          ...(selectItemId
-            ? [
-                op
-                  .where((q) => q.withItemId(selectItemId))
-                  .select(createSelectColor(color)),
-              ]
-            : []),
-        ])
-        .execute();
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  await scene
+    .items((op) => [
+      ...(deselectItemId
+        ? [op.where((q) => q.withItemId(deselectItemId)).deselect()]
+        : []),
+      ...(selectItemId
+        ? [
+            op
+              .where((q) => q.withItemId(selectItemId))
+              .select(createSelectColor(color)),
+          ]
+        : []),
+    ])
+    .execute();
 }
 
 export async function updateCamera({
   camera,
   viewer,
 }: UpdateCameraReq): Promise<void> {
-  if (viewer == null) return;
+  if (viewer == null || camera == null) return;
 
   const scene = await viewer.scene();
-  if (scene == null || camera == null) return;
+  if (scene == null) return;
 
-  try {
-    await scene.camera().update(camera).render();
-  } catch (e) {
-    console.log(e);
-  }
+  await scene.camera().update(camera).render();
 }

@@ -14,12 +14,8 @@ import React from "react";
 import * as Y from "yjs";
 
 import { StreamCredentials } from "../lib/config";
-import {
-  Pin,
-  PinColor,
-  PinToolProps,
-  ViewerSpeedDial,
-} from "./ViewerSpeedDial";
+import { Pin } from "../lib/state";
+import { PinColor, PinToolProps, ViewerSpeedDial } from "./ViewerSpeedDial";
 
 interface ViewerProps extends ViewerJSX.VertexViewer {
   readonly credentials: StreamCredentials;
@@ -29,7 +25,7 @@ interface ViewerProps extends ViewerJSX.VertexViewer {
   readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
 }
 
-export interface Action {
+export interface ActionProps {
   readonly icon: React.ReactNode;
   readonly name: string;
   readonly onClick: () => void;
