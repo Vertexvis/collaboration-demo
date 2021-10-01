@@ -45,10 +45,8 @@ interface Value {
 }
 
 function AlwaysScrollToBottom(): JSX.Element {
-  const ref =
-    React.useRef<
-      React.MutableRefObject<React.LegacyRef<HTMLDivElement> | undefined>
-    >();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ref = React.useRef<any>();
 
   React.useEffect(() => {
     if (ref.current == null) return;
