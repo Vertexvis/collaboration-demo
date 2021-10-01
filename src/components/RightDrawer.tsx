@@ -13,6 +13,7 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemText,
   TextField,
   Tooltip,
   Typography,
@@ -59,18 +60,18 @@ export function RightDrawer({
     setText(e.target.value);
   }
 
-  function handleSend() {
+  const handleSend = React.useCallback(() => {
     if (!text) return;
 
     onSendMessage(text);
     setText("");
-  }
+  }, [onSendMessage, text]);
 
   React.useEffect(() => {
     if (!enterPressed) return;
 
     handleSend();
-  }, [enterPressed]);
+  }, [enterPressed, handleSend]);
 
   return (
     <Drawer
@@ -150,16 +151,15 @@ export function RightDrawer({
         <List dense disablePadding>
           {messages.map((m, i) => (
             <ListItem key={i}>
-              <Box
-                sx={{
-                  backgroundColor: m.user.color,
-                  borderRadius: 1,
-                  height: "1rem",
-                  mr: 1,
-                  width: "1rem",
-                }}
-              />
-              {m.user.name}: {m.text}
+              <ListItemText>
+                <Typography
+                  sx={{ color: m.user.color, display: "inline" }}
+                  component="span"
+                >
+                  {m.user.name}
+                </Typography>{" "}
+                {m.text}
+              </ListItemText>
             </ListItem>
           ))}
         </List>

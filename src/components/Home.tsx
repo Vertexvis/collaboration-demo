@@ -8,7 +8,7 @@ import * as Y from "yjs";
 
 import { DefaultCredentials, head, StreamCredentials } from "../lib/config";
 import { selectByItemId, updateCamera } from "../lib/scene-items";
-import { Awareness, Message, Model, State, User, UserData } from "../lib/state";
+import { Awareness, Message, Model, State, UserData } from "../lib/state";
 import { useViewer } from "../lib/viewer";
 import { Header } from "./Header";
 import { JoinDialog } from "./JoinDialog";
