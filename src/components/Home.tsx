@@ -9,6 +9,7 @@ import * as Y from "yjs";
 import { DefaultCredentials, head, StreamCredentials } from "../lib/config";
 import { selectByItemId, updateCamera } from "../lib/scene-items";
 import { Awareness, Message, Model, State, UserData } from "../lib/state";
+import { usePrevious } from "../lib/usePrevious";
 import { useViewer } from "../lib/viewer";
 import { Header } from "./Header";
 import { JoinDialog } from "./JoinDialog";
@@ -353,14 +354,4 @@ function getAwareness(
   provider?: WebrtcProvider
 ): Awareness | undefined {
   return provider?.awareness.states.get(parseInt(key, 10)) as Awareness;
-}
-
-function usePrevious<T>(value: T): T | undefined {
-  const ref = React.useRef<T>();
-
-  React.useEffect(() => {
-    ref.current = value;
-  });
-
-  return ref.current;
 }
