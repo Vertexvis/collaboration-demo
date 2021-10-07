@@ -51,7 +51,7 @@ function AlwaysScrollToBottom(): JSX.Element {
   React.useEffect(() => {
     if (ref.current == null) return;
 
-    ref.current.scrollIntoView();
+    ref.current.scrollIntoView({ behavior: "smooth" });
   });
 
   return <div ref={ref} />;

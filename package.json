@@ -11,7 +11,7 @@
     "@mui/material": "^5.0",
     "@vertexvis/api-client-node": "^0.15",
     "@vertexvis/ui-react": "0.0.10",
-    "@vertexvis/viewer-react": "^0.10.2-canary.14",
+    "@vertexvis/viewer-react": "^0.11.1-canary.0",
     "fast-deep-equal": "^3.1",
     "next": "^11.1",
     "react": "^17.0",
