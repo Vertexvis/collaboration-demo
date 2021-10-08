@@ -9,6 +9,7 @@
     "@emotion/styled": "^11.3",
     "@mui/icons-material": "^5.0",
     "@mui/material": "^5.0",
+    "@react-hook/mouse-position": "^4.1",
     "@vertexvis/api-client-node": "^0.15",
     "@vertexvis/ui-react": "0.0.10",
     "@vertexvis/viewer-react": "^0.11.1-canary.0",

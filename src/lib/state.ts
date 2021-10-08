@@ -1,25 +1,27 @@
+import { MousePosition } from "@react-hook/mouse-position";
 import { Vector3 } from "@vertexvis/geometry";
 
 export interface Awareness {
+  readonly mousePosition?: MousePosition;
   readonly user: User;
 }
 
 export interface Message {
-  text: string;
-  user: User;
+  readonly text: string;
+  readonly user: User;
 }
 
 export type Model = Record<string, State>;
 
 export interface Pin {
-  color: string;
-  worldPosition: Vector3.Vector3;
-  itemId: string;
+  readonly color: string;
+  readonly worldPosition: Vector3.Vector3;
+  readonly itemId: string;
 }
 
 export interface State {
-  selectItemId?: string;
-  pins: Pin[];
+  readonly selectItemId?: string;
+  readonly pins: Pin[];
 }
 
 export interface User extends UserData {

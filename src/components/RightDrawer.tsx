@@ -1,70 +1,36 @@
-import {
-  ExpandMore,
-  PlayCircleOutlined,
-  ScreenShare,
-  SendOutlined,
-  StopCircleOutlined,
-} from "@mui/icons-material";
-import {
-  Accordion,
-  AccordionSummary,
-  Box,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { ExpandMore } from "@mui/icons-material";
+import { Accordion, AccordionSummary, Drawer, Typography } from "@mui/material";
 import { drawerClasses } from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
 import React from "react";
 
-import { Awareness, Message } from "../lib/state";
+import { Message } from "../lib/state";
 import { useKeyPress } from "../lib/useKeyPress";
+import { Chat } from "./Chat";
+import { DemoDescription } from "./DemoDescription";
 import { RightDrawerWidth } from "./Layout";
+import { Participants, Props as ParticipantsProps } from "./Participants";
 
 interface Props {
-  readonly cameraController?: string;
-  readonly clientId?: string;
   readonly messages: Message[];
-  readonly onCameraController: (control: boolean) => void;
-  readonly onSendMessage: (text: string) => void;
+  readonly participants: ParticipantsProps;
+  readonly onSend: (text: string) => void;
   readonly open: boolean;
-  readonly awareness: Record<number, Awareness>;
 }
 
 const Title = styled((props) => <Typography variant="body2" {...props} />)(
   () => ({ textTransform: "uppercase" })
 );
 
-interface Value {
+export interface Value {
   value: string;
 }
 
-function AlwaysScrollToBottom(): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ref = React.useRef<any>();
-
-  React.useEffect(() => {
-    if (ref.current == null) return;
-
-    ref.current.scrollIntoView({ behavior: "smooth" });
-  });
-
-  return <div ref={ref} />;
-}
-
 export function RightDrawer({
-  cameraController,
-  clientId,
   messages,
-  onCameraController,
-  onSendMessage,
+  participants,
+  onSend,
   open,
-  awareness,
 }: Props): JSX.Element {
   const [text, setText] = React.useState("");
   const enterPressed = useKeyPress("Enter");
@@ -76,9 +42,9 @@ export function RightDrawer({
   const handleSend = React.useCallback(() => {
     if (!text) return;
 
-    onSendMessage(text);
+    onSend(text);
     setText("");
-  }, [onSendMessage, text]);
+  }, [onSend, text]);
 
   React.useEffect(() => {
     if (!enterPressed) return;
@@ -98,97 +64,23 @@ export function RightDrawer({
       }}
       variant="persistent"
     >
-      <Box sx={{ mx: 2, my: 2 }}>
-        <Typography sx={{ mb: 2 }} variant="body2">
-          Use the Vertex platform with open-source software to enable real-time
-          3D model collaboration.
-        </Typography>
-        <Typography variant="body2">
-          Share the URL of your session so others can join. Part selection and
-          pins sync between participants. Use the play and stop buttons to
-          control camera-syncing between participants.
-        </Typography>
-      </Box>
+      <DemoDescription />
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Title>Participants</Title>
         </AccordionSummary>
-        <List dense>
-          {Object.entries(awareness).map(([k, v]) => (
-            <ListItem key={k}>
-              <Box
-                sx={{
-                  backgroundColor: v.user.color,
-                  borderRadius: 1,
-                  height: "1rem",
-                  mr: 1,
-                  width: "1rem",
-                }}
-              />
-              {v.user.name}
-              {clientId === k ? (
-                cameraController == clientId ? (
-                  <Tooltip title="Stop camera control">
-                    <IconButton
-                      color="primary"
-                      onClick={() => onCameraController(false)}
-                      sx={{ ml: 1 }}
-                    >
-                      <StopCircleOutlined />
-                    </IconButton>
-                  </Tooltip>
-                ) : (
-                  <Tooltip title="Control camera">
-                    <IconButton
-                      color="primary"
-                      onClick={() => onCameraController(true)}
-                      sx={{ ml: 1 }}
-                    >
-                      <PlayCircleOutlined />
-                    </IconButton>
-                  </Tooltip>
-                )
-              ) : cameraController != clientId && cameraController == k ? (
-                <ScreenShare color="action" sx={{ ml: 2 }} />
-              ) : (
-                <></>
-              )}
-            </ListItem>
-          ))}
-        </List>
+        <Participants {...participants} />
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Title>Chat</Title>
         </AccordionSummary>
-        <List dense disablePadding sx={{ maxHeight: 350, overflowY: "scroll" }}>
-          {messages.map((m, i) => (
-            <ListItem key={i}>
-              <ListItemText>
-                <Typography
-                  sx={{ color: m.user.color, display: "inline" }}
-                  component="span"
-                >
-                  {m.user.name}
-                </Typography>{" "}
-                {m.text}
-              </ListItemText>
-            </ListItem>
-          ))}
-          <AlwaysScrollToBottom />
-        </List>
-        <Box sx={{ display: "flex", m: 2 }}>
-          <TextField
-            fullWidth
-            margin="normal"
-            onChange={handleTextChange}
-            size="small"
-            value={text}
-          />
-          <IconButton sx={{ p: 2 }} onClick={handleSend} type="submit">
-            <SendOutlined color="primary" />
-          </IconButton>
-        </Box>
+        <Chat
+          messages={messages}
+          onSend={handleSend}
+          onTextChange={handleTextChange}
+          text={text}
+        />
       </Accordion>
     </Drawer>
   );
