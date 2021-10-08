@@ -6,6 +6,12 @@ export interface Awareness {
   readonly user: User;
 }
 
+export interface ContextData {
+  readonly selectOccurred: boolean;
+  readonly itemId?: string;
+  readonly point?: Point;
+}
+
 export interface Message {
   readonly text: string;
   readonly user: User;
@@ -17,6 +23,11 @@ export interface Pin {
   readonly color: string;
   readonly worldPosition: Vector3.Vector3;
   readonly itemId: string;
+}
+
+interface Point {
+  readonly x: number;
+  readonly y: number;
 }
 
 export interface State {

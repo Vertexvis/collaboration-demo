@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Menu, MenuItem } from "@mui/material";
 import useMousePosition from "@react-hook/mouse-position";
 import { Environment, Viewport } from "@vertexvis/viewer";
 import equal from "fast-deep-equal/es6/react";
@@ -9,8 +9,20 @@ import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 
 import { DefaultCredentials, head, StreamCredentials } from "../lib/config";
-import { selectByItemId, updateCamera } from "../lib/scene-items";
-import { Awareness, Message, Model, State, UserData } from "../lib/state";
+import {
+  hideByItemId,
+  selectByItemId,
+  showAll,
+  updateCamera,
+} from "../lib/scene-items";
+import {
+  Awareness,
+  ContextData,
+  Message,
+  Model,
+  State,
+  UserData,
+} from "../lib/state";
 import { usePrevious } from "../lib/usePrevious";
 import { useViewer } from "../lib/viewer";
 import { Cursor } from "./Cursor";
@@ -33,6 +45,12 @@ const Keys = {
   credentials: "credentials",
   model: "model",
   mousePosition: "mousePosition",
+};
+
+const DefaultContextData: ContextData = {
+  itemId: undefined,
+  selectOccurred: false,
+  point: undefined,
 };
 
 export function Home({ vertexEnv }: Props): JSX.Element {
@@ -58,6 +76,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const [initialized, setInitialized] = React.useState(false);
   const [cameraController, setCameraController] = React.useState<string>();
   const [clientId, setClientId] = React.useState<number>();
+  const [contextData, setContextData] =
+    React.useState<ContextData>(DefaultContextData);
   const [awareness, setAwareness] = React.useState<Record<number, Awareness>>(
     {}
   );
@@ -237,6 +257,34 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [awareness, initialized, liveSession, sceneReady, userData]);
 
+  function handleContextMenu(event: React.MouseEvent) {
+    event.preventDefault();
+
+    setContextData(
+      contextData.point == null
+        ? {
+            ...contextData,
+            point: { x: event.clientX - 2, y: event.clientY - 4 },
+          }
+        : DefaultContextData
+    );
+  }
+
+  function handleClose() {
+    setContextData(DefaultContextData);
+  }
+
+  async function handleHide() {
+    const itemId = contextData.itemId;
+    setContextData(DefaultContextData);
+    await hideByItemId({ itemId, viewer: viewer.ref.current });
+  }
+
+  async function handleShowAll() {
+    setContextData(DefaultContextData);
+    await showAll({ viewer: viewer.ref.current });
+  }
+
   return router.isReady ? (
     <Layout
       header={
@@ -246,7 +294,11 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         />
       }
       main={
-        <Box sx={{ height: "100%", width: "100%" }} ref={mouseRef}>
+        <Box
+          sx={{ height: "100%", width: "100%" }}
+          ref={mouseRef}
+          onContextMenu={handleContextMenu}
+        >
           {cameraController != null &&
             Object.keys(awareness)
               .map((k) => parseInt(k, 10))
@@ -295,6 +347,16 @@ export function Home({ vertexEnv }: Props): JSX.Element {
                   sceneItemId: itemId,
                   sceneItemSuppliedId: hit?.itemSuppliedId?.value,
                 });
+                if (buttons === 2) {
+                  setContextData({
+                    ...contextData,
+                    selectOccurred: true,
+                    itemId: itemId ?? undefined,
+                  });
+                  return;
+                }
+
+                setContextData(DefaultContextData);
                 if (clientId == null) return;
 
                 const cId = clientId.toString();
@@ -302,7 +364,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
                 if (pinsEnabled) {
                   if (
                     itemId != null &&
-                    buttons !== 2 &&
                     position != null &&
                     viewer.ref.current?.frame?.dimensions != null
                   ) {
@@ -319,10 +380,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
                       });
                     }
                   }
-                } else {
-                  if (yModel.current.get(cId)?.selectItemId != itemId) {
-                    yModel.current.set(cId, { ...cur, selectItemId: itemId });
-                  }
+                } else if (yModel.current.get(cId)?.selectItemId != itemId) {
+                  yModel.current.set(cId, { ...cur, selectItemId: itemId });
                 }
               }}
               pins={Object.keys(model)
@@ -337,6 +396,19 @@ export function Home({ vertexEnv }: Props): JSX.Element {
               viewer={viewer.ref}
             />
           )}
+          <Menu
+            open={contextData.selectOccurred && contextData.point != null}
+            onClose={handleClose}
+            anchorReference="anchorPosition"
+            anchorPosition={
+              contextData.point != null
+                ? { left: contextData.point.x, top: contextData.point.y }
+                : undefined
+            }
+          >
+            <MenuItem onClick={handleHide}>Hide</MenuItem>
+            <MenuItem onClick={handleShowAll}>Show All</MenuItem>
+          </Menu>
         </Box>
       }
       rightDrawer={

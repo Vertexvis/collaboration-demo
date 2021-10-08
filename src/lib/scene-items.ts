@@ -5,10 +5,14 @@ interface Req {
   readonly viewer: Components.VertexViewer | null;
 }
 
-interface SelectByHitReq extends Req {
+interface SelectByItemIdReq extends Req {
   readonly color?: string;
   readonly deselectItemId?: string;
   readonly selectItemId?: string;
+}
+
+interface HideByItemIdReq extends Req {
+  readonly itemId?: string;
 }
 
 interface UpdateCameraReq extends Req {
@@ -28,7 +32,7 @@ export async function selectByItemId({
   deselectItemId,
   selectItemId,
   viewer,
-}: SelectByHitReq): Promise<void> {
+}: SelectByItemIdReq): Promise<void> {
   if (viewer == null || (selectItemId == null && deselectItemId == null)) {
     return;
   }
@@ -50,6 +54,29 @@ export async function selectByItemId({
         : []),
     ])
     .execute();
+}
+
+export async function hideByItemId({
+  itemId,
+  viewer,
+}: HideByItemIdReq): Promise<void> {
+  if (viewer == null || itemId == null) return;
+
+  const scene = await viewer.scene();
+  if (scene == null) return;
+
+  await scene
+    .items((op) => [op.where((q) => q.withItemId(itemId)).hide()])
+    .execute();
+}
+
+export async function showAll({ viewer }: Req): Promise<void> {
+  if (viewer == null) return;
+
+  const scene = await viewer.scene();
+  if (scene == null) return;
+
+  await scene.items((op) => [op.where((q) => q.all()).show()]).execute();
 }
 
 export async function updateCamera({
