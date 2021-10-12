@@ -43,3 +43,7 @@ export interface UserData {
   readonly color: string;
   readonly name: string;
 }
+
+export interface Value {
+  value: string;
+}

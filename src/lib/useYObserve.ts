@@ -4,38 +4,42 @@ import * as Y from "yjs";
 
 type ObserveFunc = (event: Y.YEvent, transaction: Y.Transaction) => void;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Data = any;
+export interface YObserve<T> {
+  readonly data: T;
+  readonly event?: Y.YEvent;
+}
 
-export function useYObserve<T extends Y.AbstractType<Data>>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useYObserve<T extends Y.AbstractType<any>, DataT>(
   yType: T,
-  toJSON: () => Data
-): Data {
+  initial: DataT,
+  serialize: () => DataT
+): YObserve<DataT> {
   const [details, setDetails] = useThrottle(
-    { data: undefined as Data, event: undefined as Y.YEvent | undefined },
+    { data: initial, event: undefined as Y.YEvent | undefined },
     15
   );
   const [observer, setObserver] = React.useState<ObserveFunc>();
 
-  function update(e: Y.YEvent, d: Data) {
-    setDetails({ data: d, event: e });
+  function update(e: Y.YEvent) {
+    setDetails({ data: serialize(), event: e });
   }
 
-  function listen(type: Y.AbstractType<Data>, listenFn: ObserveFunc) {
+  function listen(type: Y.AbstractType<Y.YEvent>, listenFn: ObserveFunc) {
     type.observe(listenFn);
     setObserver(listenFn);
   }
 
   React.useEffect(() => {
-    function unListen(type: Y.AbstractType<Data>) {
+    function unListen(type: Y.AbstractType<Y.YEvent>) {
       if (observer == null) return;
 
       type.unobserve(observer);
-      setDetails({ data: undefined, event: undefined });
+      setDetails({ data: initial, event: undefined });
       setObserver(undefined);
     }
 
-    listen(yType, (e) => update(e, toJSON()));
+    listen(yType, (e) => update(e));
 
     return () => unListen(yType);
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -12,15 +12,12 @@ import { VertexColorPicker } from "@vertexvis/ui-react";
 import React from "react";
 
 import { randomColor } from "../lib/colors";
+import { Value } from "../lib/state";
 
 interface Props {
   readonly liveSession?: string;
   readonly open: boolean;
   readonly onJoin: (session: string, name: string, color: string) => void;
-}
-
-interface Value {
-  value: string;
 }
 
 export function JoinDialog({ liveSession, open, onJoin }: Props): JSX.Element {

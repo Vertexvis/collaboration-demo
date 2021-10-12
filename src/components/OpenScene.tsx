@@ -10,16 +10,13 @@ import {
 import React from "react";
 
 import { DefaultCredentials, StreamCredentials } from "../lib/config";
+import { Value } from "../lib/state";
 
 interface Props {
   readonly credentials: StreamCredentials;
   readonly open: boolean;
   readonly onClose: VoidFunction;
   readonly onConfirm: (credentials: StreamCredentials) => void;
-}
-
-interface Value {
-  value: string;
 }
 
 export function OpenDialog({

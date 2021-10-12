@@ -16,14 +16,7 @@ import {
   showAll,
   updateCamera,
 } from "../lib/scene-items";
-import {
-  Awareness,
-  ContextData,
-  Message,
-  Model,
-  State,
-  UserData,
-} from "../lib/state";
+import { Awareness, ContextData, Message, Model, UserData } from "../lib/state";
 import { usePrevious } from "../lib/usePrevious";
 import { useYArray } from "../lib/useYArray";
 import { useYMap } from "../lib/useYMap";
@@ -56,6 +49,12 @@ const DefaultContextData: ContextData = {
   point: undefined,
 };
 
+interface Config {
+  camera?: Partial<FrameCamera>;
+  cameraController?: number;
+  credentials?: StreamCredentials;
+}
+
 export function Home({ vertexEnv }: Props): JSX.Element {
   const router = useRouter();
   const viewer = useViewer();
@@ -63,19 +62,13 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const mouseRef = React.useRef<HTMLDivElement>(null);
   const provider = React.useRef<WebrtcProvider>();
   const yDoc = React.useRef(new Y.Doc());
-  const yModel = React.useRef(yDoc.current.getMap(Keys.model));
-  const { data: config, set: configSetter } = useYMap<
-    number | Partial<FrameCamera> | undefined | StreamCredentials,
-    {
-      camera: Partial<FrameCamera>;
-      cameraController: number;
-      credentials: StreamCredentials;
-    }
-  >(yDoc.current.getMap(Keys.config));
-  const { data: messages, push: pushMessages } = useYArray<Message>(
-    yDoc.current.getArray<Message>(Keys.chat)
-  );
-  const undoManager = React.useRef(new Y.UndoManager(yModel.current));
+  const modelMap = yDoc.current.getMap(Keys.model);
+  const { data: modelV2 } = useYMap<Model>(modelMap);
+  const configMap = yDoc.current.getMap(Keys.config);
+  const { data: config } = useYMap<Config>(configMap);
+  const messagesArr = yDoc.current.getArray<Message>(Keys.chat);
+  const { data: messages } = useYArray<Message>(messagesArr);
+  const undoManager = React.useRef(new Y.UndoManager(modelMap));
 
   const [liveSession, setLiveSession] = React.useState<string>();
   const [userData, setUserData] = React.useState<UserData>();
@@ -91,16 +84,15 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     {}
   );
   const [pinsEnabled, setPinsEnabled] = React.useState(false);
-  const [model, setModel] = React.useState<Model>({});
   const prevAwareness = usePrevious<Record<number, Awareness>>(awareness);
   const [sceneReady, setSceneReady] = React.useState(false);
 
+  useHotkeys("o", () => setOpenSceneDialogOpen(true), { keyup: true });
   const mousePosition = useMousePosition(mouseRef, {
     enterDelay: 100,
     fps: 15,
     leaveDelay: 100,
   });
-  useHotkeys("o", () => setOpenSceneDialogOpen(true), { keyup: true });
 
   React.useEffect(() => {
     if (provider.current == null || !config.cameraController) return;
@@ -133,31 +125,31 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     );
     if (removed.length === 0) return;
 
-    const newModel = JSON.parse(JSON.stringify(model));
     Promise.all(
       removed.map((r) => {
         if (config.cameraController === parseInt(r, 10)) {
-          configSetter(Keys.cameraController, undefined);
+          configMap.set(Keys.cameraController, undefined);
         }
 
-        if (!newModel[r]) return;
-        const deselectItemId = model[r].selectItemId;
-        delete newModel[r];
+        const cur = modelMap.get(r);
+        if (cur == null) return;
+
+        const deselectItemId = cur.selectItemId;
+        modelMap.delete(r);
         return selectByItemId({ deselectItemId, viewer: viewer.ref.current });
       })
     );
-    setModel(newModel);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [awareness, model]);
+  }, [awareness]);
 
   React.useEffect(() => {
-    if (config == null) return;
-
-    if (config.cameraController !== provider.current?.awareness.clientID) {
-      updateCamera({ camera: config.camera, viewer: viewer.ref.current });
+    if (config.camera == null || config.cameraController === clientId) {
+      return;
     }
+
+    updateCamera({ camera: config.camera, viewer: viewer.ref.current });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config]);
+  }, [config.camera, config.cameraController]);
 
   React.useEffect(() => {
     if (
@@ -196,17 +188,17 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       }
     });
 
-    yModel.current.observe((e) => {
+    modelMap.observe((e) => {
       e.changes.keys.forEach(({ action, oldValue }, key) => {
         const a = getAwareness(key, provider.current);
-        const cur = yModel.current.get(key);
+        const cur = modelMap.get(key);
         if (a == null) return;
 
-        const color = a.user.color;
+        const { color, name } = a.user;
         console.debug(
-          `${a.user.name} ${action}, new=${JSON.stringify(
-            cur
-          )}, old=${JSON.stringify(oldValue)}`
+          `${name} ${action}, new=${JSON.stringify(cur)}, old=${JSON.stringify(
+            oldValue
+          )}`
         );
         if (action === "add") {
           selectByItemId({
@@ -228,19 +220,10 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           });
         }
       });
-      const newModel: Model = {};
-      yModel.current.forEach((v: State, k: string) => {
-        const a = getAwareness(k, provider.current);
-        newModel[k] = a
-          ? {
-              ...v,
-              pins: v.pins
-                ? v.pins.map((p) => ({ ...p, color: a.user.color }))
-                : [],
-            }
-          : { pins: [] };
-      });
-      setModel(newModel);
+
+      return () => {
+        provider.current?.destroy();
+      };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [awareness, initialized, liveSession, sceneReady, userData]);
@@ -262,13 +245,13 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     const cam = (await viewer.ref.current?.scene())?.camera();
     if (
       cam == null ||
-      config.cameraController !== provider.current?.awareness.clientID
+      config.cameraController !== clientId
     ) {
       return;
     }
 
     const c = { lookAt: cam.lookAt, position: cam.position, up: cam.up };
-    if (!equal(c, config.camera)) configSetter(Keys.camera, c);
+    if (!equal(c, config.camera)) configMap.set(Keys.camera, c);
   }
 
   function handleSceneReady(): void {
@@ -296,7 +279,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     if (clientId == null) return;
 
     const cId = clientId.toString();
-    const cur = yModel.current.get(cId);
+    const cur = modelMap.get(cId);
     if (pinsEnabled) {
       if (
         itemId != null &&
@@ -304,20 +287,23 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         viewer.ref.current?.frame?.dimensions != null
       ) {
         const db = await viewer.ref.current?.frame?.depthBuffer();
-        if (db != null) {
+        if (db != null && userData != null) {
           const rect = viewer.ref.current?.getBoundingClientRect();
           const worldPosition = new Viewport(
             rect.width,
             rect.height
           ).transformPointToWorldSpace(position, db);
-          yModel.current.set(cId, {
+          modelMap.set(cId, {
             ...cur,
-            pins: [...(cur?.pins ?? []), { worldPosition, itemId }],
+            pins: [
+              ...(cur?.pins ?? []),
+              { color: userData.color, worldPosition, itemId },
+            ],
           });
         }
       }
-    } else if (yModel.current.get(cId)?.selectItemId != itemId) {
-      yModel.current.set(cId, { ...cur, selectItemId: itemId });
+    } else if (modelMap.get(cId)?.selectItemId != itemId) {
+      modelMap.set(cId, { ...cur, selectItemId: itemId });
     }
   }
 
@@ -378,8 +364,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
               onSceneChanged={() => handleSceneChanged()}
               onSceneReady={() => handleSceneReady()}
               onSelect={handleSelect}
-              pins={Object.keys(model)
-                .map((k) => model[k].pins)
+              pins={Object.keys(modelV2)
+                .map((k) => modelV2[k].pins)
                 .filter((k) => k != null)
                 .flat()}
               pinTool={{
@@ -415,16 +401,16 @@ export function Home({ vertexEnv }: Props): JSX.Element {
               : undefined,
             clientId: clientId?.toString(),
             onCameraController: (control) =>
-              configSetter(
+              configMap.set(
                 Keys.cameraController,
-                control ? provider.current?.awareness.clientID : undefined
+                control ? clientId : undefined
               ),
           }}
           onSend={(text) => {
             if (!userData || !clientId) return;
 
             const m: Message = { user: { ...userData, clientId }, text };
-            pushMessages([m]);
+            messagesArr.push([m]);
           }}
           open
         />
@@ -444,11 +430,11 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       )}
       {openSceneDialogOpen && (
         <OpenDialog
-          credentials={config.credentials}
+          credentials={config.credentials ?? DefaultCredentials}
           onClose={() => setOpenSceneDialogOpen(false)}
           onConfirm={(cs) => {
-            configSetter(Keys.credentials, cs);
-            yModel.current.clear();
+            configMap.set(Keys.credentials, cs);
+            modelMap.clear();
             setOpenSceneDialogOpen(false);
           }}
           open={openSceneDialogOpen}

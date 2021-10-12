@@ -4,7 +4,7 @@ import { drawerClasses } from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
 import React from "react";
 
-import { Message } from "../lib/state";
+import { Message, Value } from "../lib/state";
 import { useKeyPress } from "../lib/useKeyPress";
 import { Chat } from "./Chat";
 import { DemoDescription } from "./DemoDescription";
@@ -21,10 +21,6 @@ interface Props {
 const Title = styled((props) => <Typography variant="body2" {...props} />)(
   () => ({ textTransform: "uppercase" })
 );
-
-export interface Value {
-  value: string;
-}
 
 export function RightDrawer({
   messages,
@@ -71,7 +67,7 @@ export function RightDrawer({
         </AccordionSummary>
         <Participants {...participants} />
       </Accordion>
-      <Accordion>
+      <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Title>Chat</Title>
         </AccordionSummary>

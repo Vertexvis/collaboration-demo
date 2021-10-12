@@ -10,9 +10,8 @@ import {
 } from "@mui/material";
 import React from "react";
 
-import { Message } from "../lib/state";
+import { Message, Value } from "../lib/state";
 import { AlwaysScrollToBottom } from "./AlwaysScrollToBottom";
-import { Value } from "./RightDrawer";
 
 interface Props {
   readonly messages: Message[];
