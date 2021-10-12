@@ -1,6 +1,7 @@
 import { Box, Menu, MenuItem } from "@mui/material";
 import useMousePosition from "@react-hook/mouse-position";
 import { Environment, Viewport } from "@vertexvis/viewer";
+import { FrameCamera } from "@vertexvis/viewer/dist/types/lib/types/frameCamera";
 import equal from "fast-deep-equal/es6/react";
 import { useRouter } from "next/router";
 import React from "react";
@@ -24,6 +25,8 @@ import {
   UserData,
 } from "../lib/state";
 import { usePrevious } from "../lib/usePrevious";
+import { useYArray } from "../lib/useYArray";
+import { useYMap } from "../lib/useYMap";
 import { useViewer } from "../lib/viewer";
 import { Cursor } from "./Cursor";
 import { Header } from "./Header";
@@ -31,7 +34,7 @@ import { JoinDialog } from "./JoinDialog";
 import { Layout, RightDrawerWidth } from "./Layout";
 import { OpenDialog } from "./OpenScene";
 import { RightDrawer } from "./RightDrawer";
-import { Viewer } from "./Viewer";
+import { Hit, Viewer } from "./Viewer";
 
 export interface Props {
   readonly vertexEnv: Environment;
@@ -60,13 +63,20 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const mouseRef = React.useRef<HTMLDivElement>(null);
   const provider = React.useRef<WebrtcProvider>();
   const yDoc = React.useRef(new Y.Doc());
-  const yConfig = React.useRef(yDoc.current.getMap(Keys.config));
   const yModel = React.useRef(yDoc.current.getMap(Keys.model));
-  const yChat = React.useRef(yDoc.current.getArray<Message>(Keys.chat));
+  const { data: config, set: configSetter } = useYMap<
+    number | Partial<FrameCamera> | undefined | StreamCredentials,
+    {
+      camera: Partial<FrameCamera>;
+      cameraController: number;
+      credentials: StreamCredentials;
+    }
+  >(yDoc.current.getMap(Keys.config));
+  const { data: messages, push: pushMessages } = useYArray<Message>(
+    yDoc.current.getArray<Message>(Keys.chat)
+  );
   const undoManager = React.useRef(new Y.UndoManager(yModel.current));
 
-  const [credentials, setCredentials] =
-    React.useState<StreamCredentials>(DefaultCredentials);
   const [liveSession, setLiveSession] = React.useState<string>();
   const [userData, setUserData] = React.useState<UserData>();
   const [openSceneDialogOpen, setOpenSceneDialogOpen] = React.useState(false);
@@ -74,7 +84,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     !userData || !liveSession
   );
   const [initialized, setInitialized] = React.useState(false);
-  const [cameraController, setCameraController] = React.useState<string>();
   const [clientId, setClientId] = React.useState<number>();
   const [contextData, setContextData] =
     React.useState<ContextData>(DefaultContextData);
@@ -85,7 +94,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const [model, setModel] = React.useState<Model>({});
   const prevAwareness = usePrevious<Record<number, Awareness>>(awareness);
   const [sceneReady, setSceneReady] = React.useState(false);
-  const [messages, setMessages] = React.useState<Message[]>([]);
 
   const mousePosition = useMousePosition(mouseRef, {
     enterDelay: 100,
@@ -95,13 +103,13 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   useHotkeys("o", () => setOpenSceneDialogOpen(true), { keyup: true });
 
   React.useEffect(() => {
-    if (provider.current == null || !cameraController) return;
+    if (provider.current == null || !config.cameraController) return;
 
     provider.current.awareness.setLocalStateField(
       Keys.mousePosition,
       mousePosition
     );
-  }, [cameraController, mousePosition]);
+  }, [config.cameraController, mousePosition]);
 
   React.useEffect(() => {
     if (!router.isReady) return;
@@ -128,8 +136,9 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     const newModel = JSON.parse(JSON.stringify(model));
     Promise.all(
       removed.map((r) => {
-        const cc = yConfig.current.get(Keys.cameraController);
-        if (cc === r) yConfig.current.set(Keys.cameraController, null);
+        if (config.cameraController === parseInt(r, 10)) {
+          configSetter(Keys.cameraController, undefined);
+        }
 
         if (!newModel[r]) return;
         const deselectItemId = model[r].selectItemId;
@@ -140,6 +149,15 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     setModel(newModel);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [awareness, model]);
+
+  React.useEffect(() => {
+    if (config == null) return;
+
+    if (config.cameraController !== provider.current?.awareness.clientID) {
+      updateCamera({ camera: config.camera, viewer: viewer.ref.current });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config]);
 
   React.useEffect(() => {
     if (
@@ -154,6 +172,10 @@ export function Home({ vertexEnv }: Props): JSX.Element {
 
     setInitialized(true);
     provider.current = new WebrtcProvider(liveSession, yDoc.current);
+    provider.current.signalingUrls = [
+      "wss://signaling.yjs.dev",
+      "wss://y-webrtc-signaling-us.herokuapp.com",
+    ];
 
     const cId = provider.current?.awareness.clientID;
     const localA: Awareness = { user: { ...userData, clientId: cId } };
@@ -172,40 +194,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           });
         setAwareness(a);
       }
-    });
-
-    yConfig.current.observe((e) => {
-      e.changes.keys.forEach(({ action, oldValue }, key) => {
-        const cur = yConfig.current.get(key);
-        console.debug(
-          `${action}, new=${JSON.stringify(cur)}, old=${JSON.stringify(
-            oldValue
-          )}`
-        );
-        switch (key) {
-          case Keys.camera:
-            if (
-              yConfig.current.get(Keys.cameraController) !==
-              provider.current?.awareness.clientID
-            ) {
-              updateCamera({ camera: cur, viewer: viewer.ref.current });
-            }
-            break;
-          case Keys.cameraController:
-            setCameraController(cur);
-            break;
-          case Keys.credentials:
-            setCredentials(cur);
-            break;
-          default:
-            console.warn(`Unknown key: ${key}`);
-            break;
-        }
-      });
-    });
-
-    yChat.current.observe(() => {
-      setMessages(yChat.current.toArray());
     });
 
     yModel.current.observe((e) => {
@@ -257,17 +245,80 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [awareness, initialized, liveSession, sceneReady, userData]);
 
-  function handleContextMenu(event: React.MouseEvent) {
-    event.preventDefault();
+  function handleContextMenu(e: React.MouseEvent) {
+    e.preventDefault();
 
     setContextData(
       contextData.point == null
         ? {
             ...contextData,
-            point: { x: event.clientX - 2, y: event.clientY - 4 },
+            point: { x: e.clientX - 2, y: e.clientY - 4 },
           }
         : DefaultContextData
     );
+  }
+
+  async function handleSceneChanged() {
+    const cam = (await viewer.ref.current?.scene())?.camera();
+    if (
+      cam == null ||
+      config.cameraController !== provider.current?.awareness.clientID
+    ) {
+      return;
+    }
+
+    const c = { lookAt: cam.lookAt, position: cam.position, up: cam.up };
+    if (!equal(c, config.camera)) configSetter(Keys.camera, c);
+  }
+
+  function handleSceneReady(): void {
+    return setSceneReady(true);
+  }
+
+  async function handleSelect({ detail: { buttons, position }, hit }: Hit) {
+    const itemId = hit?.itemId?.hex;
+    console.debug({
+      hitNormal: hit?.hitNormal,
+      hitPoint: hit?.hitPoint,
+      sceneItemId: itemId,
+      sceneItemSuppliedId: hit?.itemSuppliedId?.value,
+    });
+    if (buttons === 2) {
+      setContextData({
+        ...contextData,
+        selectOccurred: true,
+        itemId: itemId ?? undefined,
+      });
+      return;
+    }
+
+    setContextData(DefaultContextData);
+    if (clientId == null) return;
+
+    const cId = clientId.toString();
+    const cur = yModel.current.get(cId);
+    if (pinsEnabled) {
+      if (
+        itemId != null &&
+        position != null &&
+        viewer.ref.current?.frame?.dimensions != null
+      ) {
+        const db = await viewer.ref.current?.frame?.depthBuffer();
+        if (db != null) {
+          const rect = viewer.ref.current?.getBoundingClientRect();
+          const worldPosition = new Viewport(
+            rect.width,
+            rect.height
+          ).transformPointToWorldSpace(position, db);
+          yModel.current.set(cId, {
+            ...cur,
+            pins: [...(cur?.pins ?? []), { worldPosition, itemId }],
+          });
+        }
+      }
+    } else if (yModel.current.get(cId)?.selectItemId != itemId) {
+      yModel.current.set(cId, { ...cur, selectItemId: itemId });
+    }
   }
 
   function handleClose() {
@@ -299,7 +350,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           ref={mouseRef}
           onContextMenu={handleContextMenu}
         >
-          {cameraController != null &&
+          {config.cameraController != null &&
             Object.keys(awareness)
               .map((k) => parseInt(k, 10))
               .filter((k) => k !== clientId)
@@ -323,67 +374,10 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           {viewer.isReady && (
             <Viewer
               configEnv={vertexEnv}
-              credentials={credentials}
-              onSceneChanged={async () => {
-                const cam = (await viewer.ref.current?.scene())?.camera();
-                if (
-                  cam &&
-                  cameraController === provider.current?.awareness.clientID &&
-                  !equal(cam, yConfig.current.get(Keys.camera))
-                ) {
-                  yConfig.current.set(Keys.camera, {
-                    lookAt: cam.lookAt,
-                    position: cam.position,
-                    up: cam.up,
-                  });
-                }
-              }}
-              onSceneReady={() => setSceneReady(true)}
-              onSelect={async ({ detail: { buttons, position }, hit }) => {
-                const itemId = hit?.itemId?.hex;
-                console.debug({
-                  hitNormal: hit?.hitNormal,
-                  hitPoint: hit?.hitPoint,
-                  sceneItemId: itemId,
-                  sceneItemSuppliedId: hit?.itemSuppliedId?.value,
-                });
-                if (buttons === 2) {
-                  setContextData({
-                    ...contextData,
-                    selectOccurred: true,
-                    itemId: itemId ?? undefined,
-                  });
-                  return;
-                }
-
-                setContextData(DefaultContextData);
-                if (clientId == null) return;
-
-                const cId = clientId.toString();
-                const cur = yModel.current.get(cId);
-                if (pinsEnabled) {
-                  if (
-                    itemId != null &&
-                    position != null &&
-                    viewer.ref.current?.frame?.dimensions != null
-                  ) {
-                    const db = await viewer.ref.current?.frame?.depthBuffer();
-                    if (db != null) {
-                      const rect = viewer.ref.current?.getBoundingClientRect();
-                      const worldPosition = new Viewport(
-                        rect.width,
-                        rect.height
-                      ).transformPointToWorldSpace(position, db);
-                      yModel.current.set(cId, {
-                        ...cur,
-                        pins: [...(cur?.pins ?? []), { worldPosition, itemId }],
-                      });
-                    }
-                  }
-                } else if (yModel.current.get(cId)?.selectItemId != itemId) {
-                  yModel.current.set(cId, { ...cur, selectItemId: itemId });
-                }
-              }}
+              credentials={config.credentials ?? DefaultCredentials}
+              onSceneChanged={() => handleSceneChanged()}
+              onSceneReady={() => handleSceneReady()}
+              onSelect={handleSelect}
               pins={Object.keys(model)
                 .map((k) => model[k].pins)
                 .filter((k) => k != null)
@@ -416,19 +410,21 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           messages={messages}
           participants={{
             awareness,
-            cameraController: cameraController ?? undefined,
+            cameraController: config.cameraController
+              ? config.cameraController.toString()
+              : undefined,
             clientId: clientId?.toString(),
             onCameraController: (control) =>
-              yConfig.current.set(
+              configSetter(
                 Keys.cameraController,
-                control ? provider.current?.awareness.clientID : null
+                control ? provider.current?.awareness.clientID : undefined
               ),
           }}
           onSend={(text) => {
             if (!userData || !clientId) return;
 
             const m: Message = { user: { ...userData, clientId }, text };
-            yChat.current.push([m]);
+            pushMessages([m]);
           }}
           open
         />
@@ -448,10 +444,10 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       )}
       {openSceneDialogOpen && (
         <OpenDialog
-          credentials={credentials}
+          credentials={config.credentials}
           onClose={() => setOpenSceneDialogOpen(false)}
           onConfirm={(cs) => {
-            yConfig.current?.set(Keys.credentials, cs);
+            configSetter(Keys.credentials, cs);
             yModel.current.clear();
             setOpenSceneDialogOpen(false);
           }}

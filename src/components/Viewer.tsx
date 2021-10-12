@@ -37,11 +37,13 @@ type ViewerComponentType = React.ComponentType<
 
 type HOCViewerProps = React.RefAttributes<HTMLVertexViewerElement>;
 
+export interface Hit {
+  detail: TapEventDetails;
+  hit?: vertexvis.protobuf.stream.IHit;
+}
+
 interface OnSelectProps extends HOCViewerProps {
-  readonly onSelect: (hit: {
-    detail: TapEventDetails;
-    hit?: vertexvis.protobuf.stream.IHit;
-  }) => void;
+  readonly onSelect: (hit: Hit) => void;
 }
 
 export const AnimationDurationMs = 1500;
