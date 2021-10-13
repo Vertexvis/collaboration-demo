@@ -220,11 +220,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
           });
         }
       });
-
-      return () => {
-        provider.current?.destroy();
-      };
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [awareness, initialized, liveSession, sceneReady, userData]);
 
@@ -243,10 +240,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
 
   async function handleSceneChanged() {
     const cam = (await viewer.ref.current?.scene())?.camera();
-    if (
-      cam == null ||
-      config.cameraController !== clientId
-    ) {
+    if (cam == null || config.cameraController !== clientId) {
       return;
     }
 

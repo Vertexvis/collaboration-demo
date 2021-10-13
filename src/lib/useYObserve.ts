@@ -25,8 +25,8 @@ export function useYObserve<T extends Y.AbstractType<any>, DataT>(
     setDetails({ data: serialize(), event: e });
   }
 
-  function listen(type: Y.AbstractType<Y.YEvent>, listenFn: ObserveFunc) {
-    type.observe(listenFn);
+  function listen(listenFn: ObserveFunc) {
+    yType.observe(listenFn);
     setObserver(listenFn);
   }
 
@@ -39,7 +39,7 @@ export function useYObserve<T extends Y.AbstractType<any>, DataT>(
       setObserver(undefined);
     }
 
-    listen(yType, (e) => update(e));
+    listen((e) => update(e));
 
     return () => unListen(yType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
