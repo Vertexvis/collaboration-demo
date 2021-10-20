@@ -2,6 +2,18 @@ import * as Y from "yjs";
 
 import { useYObserve, YObserve } from "./useYObserve";
 
-export function useYMap<T>(yMap: Y.Map<T[keyof T]>): YObserve<T> {
-  return useYObserve<Y.Map<T[keyof T]>, T>(yMap, {} as T, () => yMap.toJSON());
+type KeyT<T> = T[keyof T];
+
+export function useYMap<T>(
+  yDoc: Y.Doc,
+  name?: string,
+  fps = 30
+): YObserve<T, Y.Map<KeyT<T>>> {
+  const yMap = yDoc.getMap<KeyT<T>>(name);
+  return useYObserve<Y.Map<KeyT<T>>, T>(
+    yMap,
+    {} as T,
+    () => yMap.toJSON(),
+    fps
+  );
 }

@@ -49,6 +49,8 @@ const DefaultContextData: ContextData = {
   point: undefined,
 };
 
+const FramesPerSec = 15;
+
 interface Config {
   camera?: Partial<FrameCamera>;
   cameraController?: number;
@@ -62,12 +64,21 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const mouseRef = React.useRef<HTMLDivElement>(null);
   const provider = React.useRef<WebrtcProvider>();
   const yDoc = React.useRef(new Y.Doc());
-  const modelMap = yDoc.current.getMap(Keys.model);
-  const { data: modelV2 } = useYMap<Model>(modelMap);
-  const configMap = yDoc.current.getMap(Keys.config);
-  const { data: config } = useYMap<Config>(configMap);
-  const messagesArr = yDoc.current.getArray<Message>(Keys.chat);
-  const { data: messages } = useYArray<Message>(messagesArr);
+  const { data: model, type: modelMap } = useYMap<Model>(
+    yDoc.current,
+    Keys.model,
+    FramesPerSec
+  );
+  const { data: config, type: configMap } = useYMap<Config>(
+    yDoc.current,
+    Keys.config,
+    FramesPerSec
+  );
+  const { data: messages, type: messagesArr } = useYArray<Message>(
+    yDoc.current,
+    Keys.chat,
+    FramesPerSec
+  );
   const undoManager = React.useRef(new Y.UndoManager(modelMap));
 
   const [liveSession, setLiveSession] = React.useState<string>();
@@ -90,7 +101,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   useHotkeys("o", () => setOpenSceneDialogOpen(true), { keyup: true });
   const mousePosition = useMousePosition(mouseRef, {
     enterDelay: 100,
-    fps: 15,
+    fps: FramesPerSec,
     leaveDelay: 100,
   });
 
@@ -253,7 +264,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   }
 
   async function handleSelect({ detail: { buttons, position }, hit }: Hit) {
-    const itemId = hit?.itemId?.hex;
+    const itemId = hit?.itemId?.hex ?? undefined;
     console.debug({
       hitNormal: hit?.hitNormal,
       hitPoint: hit?.hitPoint,
@@ -264,7 +275,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
       setContextData({
         ...contextData,
         selectOccurred: true,
-        itemId: itemId ?? undefined,
+        itemId: itemId,
       });
       return;
     }
@@ -297,7 +308,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
         }
       }
     } else if (modelMap.get(cId)?.selectItemId != itemId) {
-      modelMap.set(cId, { ...cur, selectItemId: itemId });
+      modelMap.set(cId, { pins: cur?.pins ?? [], selectItemId: itemId });
     }
   }
 
@@ -358,8 +369,8 @@ export function Home({ vertexEnv }: Props): JSX.Element {
               onSceneChanged={() => handleSceneChanged()}
               onSceneReady={() => handleSceneReady()}
               onSelect={handleSelect}
-              pins={Object.keys(modelV2)
-                .map((k) => modelV2[k].pins)
+              pins={Object.keys(model)
+                .map((k) => model[k].pins)
                 .filter((k) => k != null)
                 .flat()}
               pinTool={{

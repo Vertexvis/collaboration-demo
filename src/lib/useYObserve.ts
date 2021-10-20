@@ -4,20 +4,22 @@ import * as Y from "yjs";
 
 type ObserveFunc = (event: Y.YEvent, transaction: Y.Transaction) => void;
 
-export interface YObserve<T> {
-  readonly data: T;
+export interface YObserve<DataT, YT> {
+  readonly data: DataT;
   readonly event?: Y.YEvent;
+  readonly type: YT;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useYObserve<T extends Y.AbstractType<any>, DataT>(
-  yType: T,
+export function useYObserve<YT extends Y.AbstractType<any>, DataT>(
+  yType: YT,
   initial: DataT,
-  serialize: () => DataT
-): YObserve<DataT> {
+  serialize: () => DataT,
+  fps = 30
+): YObserve<DataT, YT> {
   const [details, setDetails] = useThrottle(
     { data: initial, event: undefined as Y.YEvent | undefined },
-    15
+    fps
   );
   const [observer, setObserver] = React.useState<ObserveFunc>();
 
@@ -45,5 +47,5 @@ export function useYObserve<T extends Y.AbstractType<any>, DataT>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return details;
+  return { ...details, type: yType };
 }
