@@ -1,9 +1,8 @@
 /* @jsx jsx */ /** @jsxRuntime classic */ import { jsx } from "@emotion/react";
 import { vertexvis } from "@vertexvis/frame-streaming-protos";
 import { VertexIcon } from "@vertexvis/ui-react";
-import type { TapEventDetails } from "@vertexvis/viewer";
+import type { JSX as ViewerJSX, TapEventDetails } from "@vertexvis/viewer";
 import {
-  JSX as ViewerJSX,
   VertexViewer,
   VertexViewerDomElement,
   VertexViewerDomRenderer,

@@ -1,5 +1,7 @@
-import { AppBar as MuiAppBar, Box, Toolbar } from "@mui/material";
+import MuiAppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
 import React from "react";
 
 import { easeOutEntering, sharpLeaving } from "../lib/transitions";

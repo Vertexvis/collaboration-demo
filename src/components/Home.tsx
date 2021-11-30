@@ -1,4 +1,6 @@
-import { Box, Menu, MenuItem } from "@mui/material";
+import Box from "@mui/material/Box";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import useMousePosition from "@react-hook/mouse-position";
 import { Environment, Viewport } from "@vertexvis/viewer";
 import { FrameCamera } from "@vertexvis/viewer/dist/types/lib/types/frameCamera";
@@ -49,7 +51,7 @@ const DefaultContextData: ContextData = {
   point: undefined,
 };
 
-const FramesPerSec = 15;
+const FramesPerSec = 5;
 
 interface Config {
   camera?: Partial<FrameCamera>;
@@ -175,10 +177,6 @@ export function Home({ vertexEnv }: Props): JSX.Element {
 
     setInitialized(true);
     provider.current = new WebrtcProvider(liveSession, yDoc.current);
-    provider.current.signalingUrls = [
-      "wss://signaling.yjs.dev",
-      "wss://y-webrtc-signaling-us.herokuapp.com",
-    ];
 
     const cId = provider.current?.awareness.clientID;
     const localA: Awareness = { user: { ...userData, clientId: cId } };
@@ -251,9 +249,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
 
   async function handleSceneChanged() {
     const cam = (await viewer.ref.current?.scene())?.camera();
-    if (cam == null || config.cameraController !== clientId) {
-      return;
-    }
+    if (cam == null || config.cameraController !== clientId) return;
 
     const c = { lookAt: cam.lookAt, position: cam.position, up: cam.up };
     if (!equal(c, config.camera)) configMap.set(Keys.camera, c);

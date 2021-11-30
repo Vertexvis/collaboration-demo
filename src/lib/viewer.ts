@@ -1,4 +1,4 @@
-import { applyPolyfills, defineCustomElements } from "@vertexvis/viewer-react";
+import { applyPolyfills, defineCustomElements } from "@vertexvis/viewer/loader";
 import React from "react";
 
 interface Viewer {

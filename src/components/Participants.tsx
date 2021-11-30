@@ -1,9 +1,11 @@
-import {
-  PlayCircleOutlined,
-  ScreenShare,
-  StopCircleOutlined,
-} from "@mui/icons-material";
-import { Box, IconButton, List, ListItem, Tooltip } from "@mui/material";
+import PlayCircleOutlined from "@mui/icons-material/PlayCircleOutlined";
+import ScreenShare from "@mui/icons-material/ScreenShare";
+import StopCircleOutlined from "@mui/icons-material/StopCircleOutlined";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Tooltip from "@mui/material/Tooltip";
 import React from "react";
 
 import { Awareness } from "../lib/state";

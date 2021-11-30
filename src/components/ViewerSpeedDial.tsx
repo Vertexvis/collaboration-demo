@@ -1,6 +1,9 @@
 /* @jsx jsx */ /** @jsxRuntime classic */ import { jsx } from "@emotion/react";
-import { Redo, Undo, ZoomOutMap } from "@mui/icons-material";
-import { SpeedDial, SpeedDialAction } from "@mui/material";
+import Redo from "@mui/icons-material/Redo";
+import Undo from "@mui/icons-material/Undo";
+import ZoomOutMapOutlined from "@mui/icons-material/ZoomOutMapOutlined";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { VertexIcon } from "@vertexvis/ui-react";
 import * as Y from "yjs";
 
@@ -29,7 +32,7 @@ export function ViewerSpeedDial({
 }: Props): JSX.Element {
   const actions: ActionProps[] = [
     {
-      icon: <ZoomOutMap />,
+      icon: <ZoomOutMapOutlined />,
       name: "Fit all",
       onClick: () => fitAll(),
     },

@@ -1,13 +1,11 @@
-import { SendOutlined } from "@mui/icons-material";
-import {
-  Box,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  TextField,
-  Typography,
-} from "@mui/material";
+import SendOutlined from "@mui/icons-material/SendOutlined";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import React from "react";
 
 import { Message, Value } from "../lib/state";
