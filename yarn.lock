@@ -661,6 +661,11 @@
   dependencies:
     classnames "*"
 
+"@types/faker@^5.5.9":
+  version "5.5.9"
+  resolved "https://registry.yarnpkg.com/@types/faker/-/faker-5.5.9.tgz#588ede92186dc557bff8341d294335d50d255f0c"
+  integrity sha512-uCx6mP3UY5SIO14XlspxsGjgaemrxpssJI0Ol+GfhxtcKpv9pgRZYsS4eeKeHVLje6Qtc8lGszuBI461+gVZBA==
+
 "@types/json-schema@^7.0.9":
   version "7.0.9"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.9.tgz#97edc9037ea0c38585320b28964dde3b39e4660d"
@@ -887,19 +892,20 @@
   dependencies:
     "@vertexvis/frame-streaming-protos" "^0.6.18"
 
-"@vertexvis/ui-react@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@vertexvis/ui-react/-/ui-react-0.0.10.tgz#b8334a5872940cb03abb8a0754113089777a2558"
-  integrity sha512-liahY3bbHdx3rICE3krOK6SLx9qa6lGFhV1nVSV4uV0A28Qdn6kKP7vkuGcS3/4hMRQ/0C1hTnKz6rdQcIwnFQ==
+"@vertexvis/ui-react@0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@vertexvis/ui-react/-/ui-react-0.0.11.tgz#3845329ae44dc60cc6e1bb77ec891e72eddc5893"
+  integrity sha512-GGz9NRUJ+AOzpYWdZI2FznDHOK5X+98w0dotST6JxbWyVwZTJk2OtwwUVGBZ9FIxG2j+sq33ABYjygWyEnlT+A==
   dependencies:
-    "@vertexvis/ui" "0.0.10"
+    "@vertexvis/ui" "0.0.11"
 
-"@vertexvis/ui@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@vertexvis/ui/-/ui-0.0.10.tgz#a0faf52c875d950df876c775e7d4f7f046e84f8b"
-  integrity sha512-ezvK6TVW2FLraQPsUbDcFHSB5ZxakCl9hWXbIQO4YsPbXsyZM/6lukcosu42xBeFILXQ42Dqh/cbV4Qoiq0Vmg==
+"@vertexvis/ui@0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@vertexvis/ui/-/ui-0.0.11.tgz#f0b451f008673785b87b4e221283c91726c3b73e"
+  integrity sha512-3jp953oDjgWQXriE7fGS9324LOr+TOy2y2vJ9LHYZZ8w24OdnLw2wxDH/dTKlFTd7tfjLgsS5L9apoYpS9B0zw==
   dependencies:
     "@popperjs/core" "^2.9.2"
+    "@types/faker" "^5.5.9"
 
 "@vertexvis/utils@0.13.1":
   version "0.13.1"
