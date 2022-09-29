@@ -937,10 +937,10 @@
     "@typescript-eslint/types" "5.5.0"
     eslint-visitor-keys "^3.0.0"
 
-"@vertexvis/api-client-node@^0.20.0":
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/@vertexvis/api-client-node/-/api-client-node-0.20.0.tgz#7e222a6e46e1d414876bc2a462522bf4f0298a46"
-  integrity sha512-yYIud4vRMkmTQVLkAztnFkp/mKNpcXJ3RRkJI8XkIrIBmYfPCL7doJagQSg5vOUtiMydM4sNOLXON07a0pixdA==
+"@vertexvis/api-client-node@^0.20.3":
+  version "0.20.3"
+  resolved "https://registry.yarnpkg.com/@vertexvis/api-client-node/-/api-client-node-0.20.3.tgz#529bce96ff8a64ac86356ab5efc382325ec3e8f3"
+  integrity sha512-h+eVGFgo6+WHNQ/0pauIoulkRUFW/LO/uIIv3RRtU5zvdp0wTB4zdXBS/LLtjOwEM1fSqymt3fafUOrlQJSopw==
   dependencies:
     axios "^0.27.2"
     p-limit "^3"
