@@ -7,7 +7,7 @@
     "@emotion/react": "^11.10.4",
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.4",
-    "@mui/icons-material": "^5.10.2",
+    "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.3",
     "@react-hook/mouse-position": "^4.1",
     "@react-hook/throttle": "^2.2.0",
