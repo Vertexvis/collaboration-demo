@@ -362,6 +362,10 @@ export function Home({ vertexEnv }: Props): JSX.Element {
             <Viewer
               configEnv={vertexEnv}
               credentials={config.credentials ?? DefaultCredentials}
+              featureLines={{
+                  width: 1.0,
+                  color: { r: 100, g: 100, b: 100 },
+                }}
               onSceneChanged={() => handleSceneChanged()}
               onSceneReady={() => handleSceneReady()}
               onSelect={handleSelect}
@@ -373,6 +377,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
                 enabled: pinsEnabled,
                 onClick: () => setPinsEnabled(!pinsEnabled),
               }}
+              rotateAroundTapPoint={true}
               undoManager={undoManager}
               viewer={viewer.ref}
             />
