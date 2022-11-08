@@ -1,7 +1,7 @@
 /* @jsx jsx */ /** @jsxRuntime classic */ import { jsx } from "@emotion/react";
 import { vertexvis } from "@vertexvis/frame-streaming-protos";
 import { VertexIcon } from "@vertexvis/ui-react";
-import type { JSX as ViewerJSX, TapEventDetails } from "@vertexvis/viewer";
+import type { JSX as ViewerJSX, TapEventDetails, VertexViewerCustomEvent } from "@vertexvis/viewer";
 import {
   VertexViewer,
   VertexViewerDomElement,
@@ -64,7 +64,7 @@ function UnwrappedViewer({
         width: "100%",
         cursor: pinTool.enabled ? "url(/pin.svg) 12 12, crosshair;" : "default",
       }}
-      depthBuffers={pinTool.enabled ? "all" : undefined}
+      depthBuffers={pinTool.enabled ? "final" : undefined}
       ref={viewer}
       src={`urn:vertexvis:stream-key:${credentials.streamKey}`}
       {...props}
@@ -104,7 +104,7 @@ function onTap<P extends ViewerProps>(
   WrappedViewer: ViewerComponentType
 ): React.FunctionComponent<P & OnSelectProps> {
   return function Component({ viewer, onSelect, ...props }: P & OnSelectProps) {
-    async function handleTap(e: CustomEvent<TapEventDetails>) {
+    async function handleTap(e: VertexViewerCustomEvent<TapEventDetails>) {
       if (props.onTap) props.onTap(e);
 
       if (!e.defaultPrevented) {
