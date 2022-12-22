@@ -11,7 +11,7 @@
     "@mui/material": "^5.10.15",
     "@react-hook/mouse-position": "^4.1",
     "@react-hook/throttle": "^2.2.0",
-    "@vertexvis/api-client-node": "^0.20.3",
+    "@vertexvis/api-client-node": "^0.20.4",
     "@vertexvis/ui-react": "^0.0.12",
     "@vertexvis/viewer-react": "^0.15.1",
     "fast-deep-equal": "^3.1",
