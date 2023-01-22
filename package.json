@@ -21,7 +21,7 @@
     "react-hotkeys-hook": "^3.4.7",
     "y-protocols": "^1.0.5",
     "y-webrtc": "^10.2.3",
-    "yjs": "^13.5"
+    "yjs": "^13.5.44"
   },
   "devDependencies": {
     "@babel/core": "^7.16",
