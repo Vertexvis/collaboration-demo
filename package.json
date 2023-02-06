@@ -20,7 +20,7 @@
     "react-dom": "^17.0.2",
     "react-hotkeys-hook": "^3.4.7",
     "y-protocols": "^1.0.5",
-    "y-webrtc": "^10.2.3",
+    "y-webrtc": "^10.2.4",
     "yjs": "^13.5"
   },
   "devDependencies": {
