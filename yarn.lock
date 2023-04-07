@@ -3396,10 +3396,10 @@ y-protocols@^1.0.5:
   dependencies:
     lib0 "^0.2.42"
 
-y-webrtc@^10.2.4:
-  version "10.2.4"
-  resolved "https://registry.yarnpkg.com/y-webrtc/-/y-webrtc-10.2.4.tgz#454fa1dc2cad9ece65719ec4b4be36820a9b0d74"
-  integrity sha512-yoTl2tXdJsLLYIp2X2GRqNywgGwk4CEs3NcXJmgLLq2Ga8VX86q3Y3QBLy5mi30InRjjKL/ymCasAsydXTta+w==
+y-webrtc@^10.2.5:
+  version "10.2.5"
+  resolved "https://registry.yarnpkg.com/y-webrtc/-/y-webrtc-10.2.5.tgz#ceb2f5d9bf9047ed56c290106b989ad95ed0ea18"
+  integrity sha512-ZyBNvTI5L28sQ2PQI0T/JvyWgvuTq05L21vGkIlcvNLNSJqAaLCBJRe3FHEqXoaogqWmRcEAKGfII4ErNXMnNw==
   dependencies:
     lib0 "^0.2.42"
     simple-peer "^9.11.0"
