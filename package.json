@@ -8,7 +8,7 @@
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.10.8",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.12.0",
+    "@mui/material": "^5.13.0",
     "@react-hook/mouse-position": "^4.1",
     "@react-hook/throttle": "^2.2.0",
     "@vertexvis/api-client-node": "^0.20.7",
