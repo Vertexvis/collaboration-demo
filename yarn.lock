@@ -222,20 +222,6 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@babel/runtime@^7.22.15":
-  version "7.22.15"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.15.tgz#38f46494ccf6cf020bd4eed7124b425e83e523b8"
-  integrity sha512-T0O+aa+4w0u06iNmapipJXMV4HoUir03hpx3/YqXXhu9xim3w+dVphjFWl1OH8NbZHw5Lbm9k45drDkgq2VNNA==
-  dependencies:
-    regenerator-runtime "^0.14.0"
-
-"@babel/runtime@^7.22.6":
-  version "7.22.6"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.6.tgz#57d64b9ae3cff1d67eb067ae117dac087f5bd438"
-  integrity sha512-wDb5pWm4WDdF6LFUde3Jl8WzPA+3ZbxYqkC6xAXuD3irdEHN1k0NfTRrJD8ZD378SJ61miMLCqIOXYhd8x+AJQ==
-  dependencies:
-    regenerator-runtime "^0.13.11"
-
 "@babel/template@^7.16.0":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.16.0.tgz#d16a35ebf4cd74e202083356fab21dd89363ddd6"
@@ -977,17 +963,17 @@
   dependencies:
     "@vertexvis/frame-streaming-protos" "^0.10.4"
 
-"@vertexvis/ui-react@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@vertexvis/ui-react/-/ui-react-0.0.12.tgz#14ba6e36deb5b0fa9799c39f2d568bc3e02e96b9"
-  integrity sha512-6lVSoH8ZbwHU9ebxQdWSTc6V4NfaUR94vlD1IFgi7sG2pFk201elc16JkRZ5Zq6FxCJ+j287Kby9uyG+9pk/nQ==
+"@vertexvis/ui-react@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@vertexvis/ui-react/-/ui-react-0.0.13.tgz#fc23b6b27664dbda0b9635ae674bf7c60312ce31"
+  integrity sha512-ez9kcya5TxtQrju378OtyHOdsVCrjTUEYhNsY5Ub75L0r/d3w8So4NglPagyrrgBLEr+9P6HJudgcnEv/9BM0g==
   dependencies:
-    "@vertexvis/ui" "0.0.12"
+    "@vertexvis/ui" "0.0.13"
 
-"@vertexvis/ui@0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@vertexvis/ui/-/ui-0.0.12.tgz#669fcd13e6ed76959482b582b8ac92d42c466411"
-  integrity sha512-CG+UeuGZRagsB+qxrPd2kLOFdLxlsvMO5cOvmP8lggeQLtvnQiFXPgactLx+xIvFVjWq/fbWGtZ5+q2ohNKHNQ==
+"@vertexvis/ui@0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@vertexvis/ui/-/ui-0.0.13.tgz#c5880139851a5fc7406828b99c33b875b1f74e21"
+  integrity sha512-dHdIXNJgnln8RCrtDeZrPHnNEhItxU4SYJeiMIzK/7ONIvz2LXSfS5aN80y4+GKI9xOtKhE50IdL3xO7HNtuaw==
   dependencies:
     "@popperjs/core" "^2.9.2"
     "@types/faker" "^5.5.9"
@@ -2931,11 +2917,6 @@ readable-stream@~1.0.17, readable-stream@~1.0.27-1:
     inherits "~2.0.1"
     isarray "0.0.1"
     string_decoder "~0.10.x"
-
-regenerator-runtime@^0.13.11:
-  version "0.13.11"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
-  integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
 regenerator-runtime@^0.13.4:
   version "0.13.9"
