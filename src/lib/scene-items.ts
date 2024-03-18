@@ -1,5 +1,6 @@
 import { ColorMaterial, Components } from "@vertexvis/viewer";
 import { FrameCamera } from "@vertexvis/viewer/dist/types/lib/types/frameCamera";
+import equal from "fast-deep-equal/es6/react";
 
 interface Req {
   readonly viewer: Components.VertexViewer | null;
@@ -37,20 +38,27 @@ export async function selectByItemId({
     return;
   }
 
+  console.log("selectByItemId:", deselectItemId, selectItemId);
+
   const scene = await viewer.scene();
   if (scene == null) return;
 
   await scene
     .items((op) => [
       ...(deselectItemId
-        ? [op.where((q) => q.withItemId(deselectItemId)).deselect(), op.where((q) => q.withItemId(deselectItemId)).clearMaterialOverrides()]
+        ? [
+            op.where((q) => q.withItemId(deselectItemId)).deselect(),
+            op
+              .where((q) => q.withItemId(deselectItemId))
+              .clearMaterialOverrides(),
+          ]
         : []),
       ...(selectItemId
         ? [
+            op.where((q) => q.withItemId(selectItemId)).select(),
             op
               .where((q) => q.withItemId(selectItemId))
-              .select(),
-              op.where((q) => q.withItemId(selectItemId)).materialOverride(createSelectColor(color))
+              .materialOverride(createSelectColor(color)),
           ]
         : []),
     ])
@@ -89,5 +97,7 @@ export async function updateCamera({
   const scene = await viewer.scene();
   if (scene == null) return;
 
-  await scene.camera().update(camera).render();
+  if (!equal(scene.camera().toFrameCamera(), camera)) {
+    await scene.camera().update(camera).render();
+  }
 }

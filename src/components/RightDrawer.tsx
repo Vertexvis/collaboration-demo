@@ -3,7 +3,6 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Drawer from "@mui/material/Drawer";
 import { drawerClasses } from "@mui/material/Drawer";
-import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import React from "react";
 
@@ -20,10 +19,6 @@ interface Props {
   readonly onSend: (text: string) => void;
   readonly open: boolean;
 }
-
-const Title = styled((props) => <Typography variant="body2" {...props} />)(
-  () => ({ textTransform: "uppercase" })
-);
 
 export function RightDrawer({
   messages,
@@ -66,13 +61,13 @@ export function RightDrawer({
       <DemoDescription />
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Title>Participants</Title>
+          <Typography variant="body2" style={{textTransform: "uppercase"}}>Participants</Typography>
         </AccordionSummary>
         <Participants {...participants} />
       </Accordion>
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Title>Chat</Title>
+          <Typography variant="body2" style={{textTransform: "uppercase"}}>Chat</Typography>
         </AccordionSummary>
         <Chat
           messages={messages}

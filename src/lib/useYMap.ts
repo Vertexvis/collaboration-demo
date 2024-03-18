@@ -13,7 +13,7 @@ export function useYMap<T>(
   return useYObserve<Y.Map<KeyT<T>>, T>(
     yMap,
     {} as T,
-    () => yMap.toJSON(),
+    () => yMap.toJSON() as T,
     fps
   );
 }

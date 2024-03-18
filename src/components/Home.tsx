@@ -3,7 +3,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import useMousePosition from "@react-hook/mouse-position";
 import { Environment, Viewport } from "@vertexvis/viewer";
-import { FrameCamera } from "@vertexvis/viewer/dist/types/lib/types/frameCamera";
+import { FrameCamera } from "@vertexvis/viewer/dist/types/lib/types";
 import equal from "fast-deep-equal/es6/react";
 import { useRouter } from "next/router";
 import React from "react";
@@ -54,7 +54,7 @@ const DefaultContextData: ContextData = {
 const FramesPerSec = 5;
 
 interface Config {
-  camera?: Partial<FrameCamera>;
+  camera?: Partial<FrameCamera.FrameCamera>;
   cameraController?: number;
   credentials?: StreamCredentials;
 }
@@ -176,7 +176,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     }
 
     setInitialized(true);
-    provider.current = new WebrtcProvider(liveSession, yDoc.current);
+    provider.current = new WebrtcProvider(liveSession, yDoc.current, {signaling: ["ws://brent.dev.vertexvis.io"]});
 
     const cId = provider.current?.awareness.clientID;
     const localA: Awareness = { user: { ...userData, clientId: cId } };
