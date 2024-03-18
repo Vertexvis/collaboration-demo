@@ -176,7 +176,7 @@ export function Home({ vertexEnv }: Props): JSX.Element {
     }
 
     setInitialized(true);
-    provider.current = new WebrtcProvider(liveSession, yDoc.current, {signaling: ["ws://brent.dev.vertexvis.io"]});
+    provider.current = new WebrtcProvider(liveSession, yDoc.current, {signaling: ["wss://brent.dev.vertexvis.io"]});
 
     const cId = provider.current?.awareness.clientID;
     const localA: Awareness = { user: { ...userData, clientId: cId } };
