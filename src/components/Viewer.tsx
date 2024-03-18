@@ -67,7 +67,6 @@ function UnwrappedViewer({
       depthBuffers={pinTool.enabled ? "final" : undefined}
       ref={viewer}
       src={`urn:vertexvis:stream-key:${credentials.streamKey}`}
-      enableTemporalRefinement={false}
       {...props}
     >
       <VertexViewerDomRenderer drawMode="2d" id="viewer-pin-renderer">
