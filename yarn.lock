@@ -971,7 +971,7 @@
 
 "@vertexvis/scene-tree-protos@^0.1.21":
   version "0.1.23"
-  resolved "https://rregistry.yarnpkg.com/@vertexvis/scene-tree-protos/-/scene-tree-protos-0.1.23.tgz#d0d43f14419db18543c78398d72dcf06efce74e0"
+  resolved "https://registry.yarnpkg.com/@vertexvis/scene-tree-protos/-/scene-tree-protos-0.1.23.tgz#d0d43f14419db18543c78398d72dcf06efce74e0"
   integrity sha512-Utb58aiV+k5A+ZPrEUKK4F5ckSRHJyLmLVwHJXVh7iHWNCwXATUaiu9k/YJ6kxUomOSGwL+zIs1lkgRtLDScGw==
 
 "@vertexvis/scene-view-protos@^0.4.3":
