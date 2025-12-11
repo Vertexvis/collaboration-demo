@@ -21,7 +21,7 @@ interface Props {
   readonly open: boolean;
 }
 
-const Title = styled((props) => <Typography variant="body2" {...props} />)(
+const Title = styled((props: any) => <Typography variant="body2" {...props} />)(
   () => ({ textTransform: "uppercase" })
 );
 
