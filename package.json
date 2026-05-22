@@ -15,7 +15,7 @@
     "@vertexvis/ui-react": "^0.0.13",
     "@vertexvis/viewer-react": "^0.22.0",
     "fast-deep-equal": "^3.1",
-    "next": "^14.2.35",
+    "next": "^15.5.18",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hotkeys-hook": "^3.4.7",
@@ -37,14 +37,18 @@
     "eslint-plugin-simple-import-sort": "^7.0",
     "prettier": "^2.5",
     "tslib": "^2.3",
-    "typescript": "^4"
+    "typescript": "^5"
   },
   "resolutions": {
     "ajv": "^8.18.0",
+    "axios": "1.15.2",
     "cross-spawn": "^7.0.5",
+    "fast-uri": "3.1.2",
+    "flatted": "3.4.2",
     "html-tokenize": "^2.0.1",
     "json5": "^2.2.2",
     "minimatch": "^3.0.5",
+    "protobufjs": "7.5.6",
     "semver": "^7.5.2",
     "word-wrap": "^1.2.4"
   },
