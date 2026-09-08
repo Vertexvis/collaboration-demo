@@ -2166,6 +2166,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@typescript-eslint/parser": "npm:^5.62.0"
     "@vertexvis/api-client-node": "npm:^0.34.0"
+    "@vertexvis/geometry": "npm:0.22.0"
     "@vertexvis/ui-react": "npm:^0.0.13"
     "@vertexvis/viewer-react": "npm:^0.22.0"
     babel-plugin-import: "npm:^1.13.8"
