@@ -43,14 +43,19 @@ export async function selectByItemId({
   await scene
     .items((op) => [
       ...(deselectItemId
-        ? [op.where((q) => q.withItemId(deselectItemId)).deselect(), op.where((q) => q.withItemId(deselectItemId)).clearMaterialOverrides()]
+        ? [
+            op.where((q) => q.withItemId(deselectItemId)).deselect(),
+            op
+              .where((q) => q.withItemId(deselectItemId))
+              .clearMaterialOverrides(),
+          ]
         : []),
       ...(selectItemId
         ? [
+            op.where((q) => q.withItemId(selectItemId)).select(),
             op
               .where((q) => q.withItemId(selectItemId))
-              .select(),
-              op.where((q) => q.withItemId(selectItemId)).materialOverride(createSelectColor(color))
+              .materialOverride(createSelectColor(color)),
           ]
         : []),
     ])

@@ -363,9 +363,9 @@ export function Home({ vertexEnv }: Props): JSX.Element {
               configEnv={vertexEnv}
               credentials={config.credentials ?? DefaultCredentials}
               featureLines={{
-                  width: 1.0,
-                  color: { r: 100, g: 100, b: 100 },
-                }}
+                width: 1.0,
+                color: { r: 100, g: 100, b: 100 },
+              }}
               onSceneChanged={() => handleSceneChanged()}
               onSceneReady={() => handleSceneReady()}
               onSelect={handleSelect}
