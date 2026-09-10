@@ -4,6 +4,7 @@
 .env.production.local
 .env.test.local
 yarn-error.log*
+.yarn/install-state.gz
 
 /.next
 /node_modules

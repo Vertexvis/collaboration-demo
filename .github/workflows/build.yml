@@ -11,5 +11,6 @@ jobs:
         with: { node-version: 22.x }
       - name: Build
         run: |
-          yarn install --frozen-lockfile
+          corepack enable
+          yarn install --immutable
           yarn build
