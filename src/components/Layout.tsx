@@ -97,7 +97,7 @@ export function Layout({
   main,
   rightDrawer,
   rightDrawerWidth = 0,
-}: Props): JSX.Element {
+}: Props): React.JSX.Element {
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
       {header && (

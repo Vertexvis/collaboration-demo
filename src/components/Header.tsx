@@ -9,7 +9,10 @@ interface Props {
   readonly onOpenSceneClick: () => void;
 }
 
-export function Header({ liveSession, onOpenSceneClick }: Props): JSX.Element {
+export function Header({
+  liveSession,
+  onOpenSceneClick,
+}: Props): React.JSX.Element {
   return (
     <Box
       sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}

@@ -59,12 +59,12 @@ interface Config {
   credentials?: StreamCredentials;
 }
 
-export function Home({ vertexEnv }: Props): JSX.Element {
+export function Home({ vertexEnv }: Props): React.JSX.Element {
   const router = useRouter();
   const viewer = useViewer();
 
   const mouseRef = React.useRef<HTMLDivElement>(null);
-  const provider = React.useRef<WebrtcProvider>();
+  const provider = React.useRef<WebrtcProvider | undefined>(undefined);
   const yDoc = React.useRef(new Y.Doc());
   const { data: model, type: modelMap } = useYMap<Model>(
     yDoc.current,
@@ -100,12 +100,18 @@ export function Home({ vertexEnv }: Props): JSX.Element {
   const prevAwareness = usePrevious<Record<number, Awareness>>(awareness);
   const [sceneReady, setSceneReady] = React.useState(false);
 
-  useHotkeys("o", () => setOpenSceneDialogOpen(true), { keyup: true });
-  const mousePosition = useMousePosition(mouseRef, {
-    enterDelay: 100,
-    fps: FramesPerSec,
-    leaveDelay: 100,
+  useHotkeys("o", () => setOpenSceneDialogOpen(true), {
+    keyup: true,
+    useKey: true,
   });
+  const mousePosition = useMousePosition(
+    mouseRef as React.RefObject<HTMLElement>,
+    {
+      enterDelay: 100,
+      fps: FramesPerSec,
+      leaveDelay: 100,
+    }
+  );
 
   React.useEffect(() => {
     if (provider.current == null || !config.cameraController) return;

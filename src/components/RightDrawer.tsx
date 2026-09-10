@@ -21,16 +21,16 @@ interface Props {
   readonly open: boolean;
 }
 
-const Title = styled((props: TypographyProps) => <Typography variant="body2" {...props} />)(
-  () => ({ textTransform: "uppercase" })
-);
+const Title = styled((props: TypographyProps) => (
+  <Typography variant="body2" {...props} />
+))(() => ({ textTransform: "uppercase" }));
 
 export function RightDrawer({
   messages,
   participants,
   onSend,
   open,
-}: Props): JSX.Element {
+}: Props): React.JSX.Element {
   const [text, setText] = React.useState("");
   const enterPressed = useKeyPress("Enter");
 

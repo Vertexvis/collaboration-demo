@@ -9,7 +9,7 @@ export interface Props {
   readonly vertexEnv: Environment;
 }
 
-export default function Index(props: Props): JSX.Element {
+export default function Index(props: Props): React.JSX.Element {
   return <Home {...props} />;
 }
 

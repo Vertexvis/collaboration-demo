@@ -4,7 +4,9 @@ export function useEventListener(
   eventName: string,
   handler: (e: Event) => void
 ): void {
-  const savedHandler = React.useRef<(e: Event) => void>();
+  const savedHandler = React.useRef<((e: Event) => void) | undefined>(
+    undefined
+  );
 
   React.useEffect(() => {
     savedHandler.current = handler;

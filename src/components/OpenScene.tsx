@@ -22,7 +22,7 @@ export function OpenDialog({
   open,
   onClose,
   onConfirm,
-}: Props): JSX.Element {
+}: Props): React.JSX.Element {
   const [inputCreds, setInputCreds] =
     React.useState<StreamCredentials>(credentials);
   const emptyClientId = inputCreds.clientId === "";

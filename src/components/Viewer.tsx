@@ -59,7 +59,7 @@ function UnwrappedViewer({
   undoManager,
   viewer,
   ...props
-}: ViewerProps): JSX.Element {
+}: ViewerProps): React.JSX.Element {
   return (
     <VertexViewer
       clientId={credentials.clientId}

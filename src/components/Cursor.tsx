@@ -9,7 +9,7 @@ interface Props {
   readonly y: number;
 }
 
-export function Cursor({ color, x, y }: Props): JSX.Element {
+export function Cursor({ color, x, y }: Props): React.JSX.Element {
   const size = "0.6em";
   const shared: SxProps<Theme> = {
     backgroundColor: "inherit",

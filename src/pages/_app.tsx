@@ -14,7 +14,10 @@ import theme from "../lib/theme";
 const cache = createCache({ key: "css", prepend: true });
 cache.compat = true;
 
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
+export default function App({
+  Component,
+  pageProps,
+}: AppProps): React.JSX.Element {
   const router = useRouter();
 
   React.useEffect(() => {
