@@ -105,7 +105,7 @@ function UnwrappedViewer({
 }
 
 function onTap<P extends ViewerProps>(
-  WrappedViewer: ViewerComponentType
+  WrappedViewer: ViewerComponentType,
 ): React.FunctionComponent<P & OnSelectProps> {
   return function Component({ viewer, onSelect, ...props }: P & OnSelectProps) {
     async function handleTap(e: VertexViewerCustomEvent<TapEventDetails>) {

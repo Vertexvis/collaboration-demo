@@ -37,55 +37,55 @@ function shouldForwardProp(prop: PropertyKey): boolean {
   );
 }
 
-const AppBar = styled(MuiAppBar, { shouldForwardProp })<DrawerProps>(
-  ({ leftDrawerWidth, rightDrawerWidth, theme }) => {
-    const { create } = theme.transitions;
-    return {
-      marginLeft: leftDrawerWidth,
-      transition: create(["margin", "width"], sharpLeaving(theme)),
-      zIndex: theme.zIndex.drawer + 1,
-      ...(rightDrawerWidth > 0 && {
-        marginRight: rightDrawerWidth,
-        transition: create(["margin", "width"], easeOutEntering(theme)),
-        width: `calc(100% - ${leftDrawerWidth + rightDrawerWidth}px)`,
-      }),
-      [theme.breakpoints.down("sm")]: {
-        margin: 0,
-        width: `100%`,
-      },
-    };
-  }
-);
+const AppBar = styled(MuiAppBar, { shouldForwardProp })<DrawerProps>(({
+  leftDrawerWidth,
+  rightDrawerWidth,
+  theme,
+}) => {
+  const { create } = theme.transitions;
+  return {
+    marginLeft: leftDrawerWidth,
+    transition: create(["margin", "width"], sharpLeaving(theme)),
+    zIndex: theme.zIndex.drawer + 1,
+    ...(rightDrawerWidth > 0 && {
+      marginRight: rightDrawerWidth,
+      transition: create(["margin", "width"], easeOutEntering(theme)),
+      width: `calc(100% - ${leftDrawerWidth + rightDrawerWidth}px)`,
+    }),
+    [theme.breakpoints.down("sm")]: {
+      margin: 0,
+      width: `100%`,
+    },
+  };
+});
 
 const Main = styled("main", { shouldForwardProp })<
   DrawerProps & { bottomDrawerHeight: number; toolbarHeight: number }
->(
-  ({
-    bottomDrawerHeight,
-    leftDrawerWidth,
-    rightDrawerWidth,
-    theme,
-    toolbarHeight,
-  }) => {
-    const { create } = theme.transitions;
-    return {
-      flexGrow: 1,
-      height: `calc(100% - ${bottomDrawerHeight + toolbarHeight}px)`,
-      marginRight: -RightDrawerWidth,
-      marginTop: `${toolbarHeight}px`,
-      maxWidth: `calc(100% - ${leftDrawerWidth}px)`,
-      transition: create("margin", sharpLeaving(theme)),
-      ...(rightDrawerWidth > 0 && {
-        marginRight: 0,
-        transition: create("margin", easeOutEntering(theme)),
-      }),
-      [theme.breakpoints.down("sm")]: { width: `100%` },
-      ...(rightDrawerWidth > 0 && {
-        width: `calc(100% - ${leftDrawerWidth + rightDrawerWidth}px)`,
-      }),
-    };
-  }
-);
+>(({
+  bottomDrawerHeight,
+  leftDrawerWidth,
+  rightDrawerWidth,
+  theme,
+  toolbarHeight,
+}) => {
+  const { create } = theme.transitions;
+  return {
+    flexGrow: 1,
+    height: `calc(100% - ${bottomDrawerHeight + toolbarHeight}px)`,
+    marginRight: -RightDrawerWidth,
+    marginTop: `${toolbarHeight}px`,
+    maxWidth: `calc(100% - ${leftDrawerWidth}px)`,
+    transition: create("margin", sharpLeaving(theme)),
+    ...(rightDrawerWidth > 0 && {
+      marginRight: 0,
+      transition: create("margin", easeOutEntering(theme)),
+    }),
+    [theme.breakpoints.down("sm")]: { width: `100%` },
+    ...(rightDrawerWidth > 0 && {
+      width: `calc(100% - ${leftDrawerWidth + rightDrawerWidth}px)`,
+    }),
+  };
+});
 
 export function Layout({
   bottomDrawer,

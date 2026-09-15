@@ -2,8 +2,7 @@ import Box from "@mui/material/Box";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import useMousePosition from "@react-hook/mouse-position";
-import { Environment, Viewport } from "@vertexvis/viewer";
-import { FrameCamera } from "@vertexvis/viewer/dist/types/lib/types/frameCamera";
+import { Environment, FrameCamera, Viewport } from "@vertexvis/viewer";
 import equal from "fast-deep-equal/es6/react";
 import { useRouter } from "next/router";
 import React from "react";
@@ -54,7 +53,7 @@ const DefaultContextData: ContextData = {
 const FramesPerSec = 5;
 
 interface Config {
-  camera?: Partial<FrameCamera>;
+  camera?: Partial<FrameCamera.FrameCamera>;
   cameraController?: number;
   credentials?: StreamCredentials;
 }
@@ -69,17 +68,17 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
   const { data: model, type: modelMap } = useYMap<Model>(
     yDoc.current,
     Keys.model,
-    FramesPerSec
+    FramesPerSec,
   );
   const { data: config, type: configMap } = useYMap<Config>(
     yDoc.current,
     Keys.config,
-    FramesPerSec
+    FramesPerSec,
   );
   const { data: messages, type: messagesArr } = useYArray<Message>(
     yDoc.current,
     Keys.chat,
-    FramesPerSec
+    FramesPerSec,
   );
   const undoManager = React.useRef(new Y.UndoManager(modelMap));
 
@@ -87,14 +86,14 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
   const [userData, setUserData] = React.useState<UserData>();
   const [openSceneDialogOpen, setOpenSceneDialogOpen] = React.useState(false);
   const [joinDialogOpen, setJoinDialogOpen] = React.useState(
-    !userData || !liveSession
+    !userData || !liveSession,
   );
   const [initialized, setInitialized] = React.useState(false);
   const [clientId, setClientId] = React.useState<number>();
   const [contextData, setContextData] =
     React.useState<ContextData>(DefaultContextData);
   const [awareness, setAwareness] = React.useState<Record<number, Awareness>>(
-    {}
+    {},
   );
   const [pinsEnabled, setPinsEnabled] = React.useState(false);
   const prevAwareness = usePrevious<Record<number, Awareness>>(awareness);
@@ -110,7 +109,7 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
       enterDelay: 100,
       fps: FramesPerSec,
       leaveDelay: 100,
-    }
+    },
   );
 
   React.useEffect(() => {
@@ -118,7 +117,7 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
 
     provider.current.awareness.setLocalStateField(
       Keys.mousePosition,
-      mousePosition
+      mousePosition,
     );
   }, [config.cameraController, mousePosition]);
 
@@ -140,7 +139,7 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
     if (prevAwareness == null) return;
 
     const removed = Object.keys(prevAwareness).filter(
-      (pk) => !Object.keys(awareness).some((k) => pk === k)
+      (pk) => !Object.keys(awareness).some((k) => pk === k),
     );
     if (removed.length === 0) return;
 
@@ -156,7 +155,7 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
         const deselectItemId = cur.selectItemId;
         modelMap.delete(r);
         return selectByItemId({ deselectItemId, viewer: viewer.ref.current });
-      })
+      }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [awareness]);
@@ -212,8 +211,8 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
         const { color, name } = a.user;
         console.debug(
           `${name} ${action}, new=${JSON.stringify(cur)}, old=${JSON.stringify(
-            oldValue
-          )}`
+            oldValue,
+          )}`,
         );
         if (action === "add") {
           selectByItemId({
@@ -249,7 +248,7 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
             ...contextData,
             point: { x: e.clientX - 2, y: e.clientY - 4 },
           }
-        : DefaultContextData
+        : DefaultContextData,
     );
   }
 
@@ -298,7 +297,7 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
           const rect = viewer.ref.current?.getBoundingClientRect();
           const worldPosition = new Viewport(
             rect.width,
-            rect.height
+            rect.height,
           ).transformPointToWorldSpace(position, db);
           modelMap.set(cId, {
             ...cur,
@@ -415,7 +414,7 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
             onCameraController: (control) =>
               configMap.set(
                 Keys.cameraController,
-                control ? clientId : undefined
+                control ? clientId : undefined,
               ),
           }}
           onSend={(text) => {
@@ -460,7 +459,7 @@ export function Home({ vertexEnv }: Props): React.JSX.Element {
 
 function getAwareness(
   key: string,
-  provider?: WebrtcProvider
+  provider?: WebrtcProvider,
 ): Awareness | undefined {
   return provider?.awareness.states.get(parseInt(key, 10)) as Awareness;
 }

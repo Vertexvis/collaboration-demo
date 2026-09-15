@@ -31,7 +31,6 @@ export function JoinDialog({
     if (!liveSession) return;
 
     setSession(liveSession);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [liveSession]);
 
   function handleNameChange(e: React.ChangeEvent<Value>): void {

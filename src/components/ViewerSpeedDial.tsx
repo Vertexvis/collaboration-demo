@@ -49,7 +49,7 @@ export function ViewerSpeedDial({
         icon: <Undo />,
         name: "Undo",
         onClick: () => undo(),
-      }
+      },
     );
   }
 
