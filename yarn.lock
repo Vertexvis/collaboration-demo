@@ -2558,7 +2558,6 @@ __metadata:
     babel-plugin-import: "npm:^1.13.8"
     eslint: "npm:^9.39.5"
     eslint-config-next: "npm:^15.5.25"
-    eslint-config-prettier: "npm:^8.10.2"
     eslint-plugin-simple-import-sort: "npm:^13.0.0"
     fast-deep-equal: "npm:^3.1.3"
     next: "npm:^15.5.25"
@@ -3242,17 +3241,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 10c0/ecb1ccfccd1ccb055874de6b95b5e8c7558da2643e941e58012e95c400c49b192cec2bb04d15d8be634a7cf8ca9673384c5e2313b43a8b88fce7a4fbd3ad089b
-  languageName: node
-  linkType: hard
-
-"eslint-config-prettier@npm:^8.10.2":
-  version: 8.10.2
-  resolution: "eslint-config-prettier@npm:8.10.2"
-  peerDependencies:
-    eslint: ">=7.0.0"
-  bin:
-    eslint-config-prettier: bin/cli.js
-  checksum: 10c0/b5953cf7a86f685e1218b16707bf36643b525513d08495226a6820caccd8b7bfc6b9aa64ac7cb2415dbe2c1f7dc4995832148bdc53ad45777f75a8ded1073b29
   languageName: node
   linkType: hard
 
