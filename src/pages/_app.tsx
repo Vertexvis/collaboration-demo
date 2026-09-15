@@ -1,4 +1,5 @@
 import "@vertexvis/viewer/dist/viewer/viewer.css";
+import "../lib/randomUUID-shim";
 
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
