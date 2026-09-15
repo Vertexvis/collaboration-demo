@@ -59,7 +59,7 @@ function UnwrappedViewer({
   undoManager,
   viewer,
   ...props
-}: ViewerProps): JSX.Element {
+}: ViewerProps): React.JSX.Element {
   return (
     <VertexViewer
       clientId={credentials.clientId}
@@ -105,7 +105,7 @@ function UnwrappedViewer({
 }
 
 function onTap<P extends ViewerProps>(
-  WrappedViewer: ViewerComponentType
+  WrappedViewer: ViewerComponentType,
 ): React.FunctionComponent<P & OnSelectProps> {
   return function Component({ viewer, onSelect, ...props }: P & OnSelectProps) {
     async function handleTap(e: VertexViewerCustomEvent<TapEventDetails>) {

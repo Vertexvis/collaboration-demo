@@ -20,7 +20,7 @@ export const DefaultCredentials: StreamCredentials = {
 };
 
 export function head<T>(items?: T | T[]): T | undefined {
-  return Array.isArray(items) ? items[0] : items ?? undefined;
+  return Array.isArray(items) ? items[0] : (items ?? undefined);
 }
 
 function envVar(name: string, fallback: string): string {

@@ -2,27 +2,30 @@ import { useThrottle } from "@react-hook/throttle";
 import React from "react";
 import * as Y from "yjs";
 
-type ObserveFunc<YT extends Y.AbstractType<any>> = (
+// Yjs makes AbstractType invariant in its concrete observer event type.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type YType = Y.AbstractType<any>;
+
+type ObserveFunc<YT extends YType> = (
   event: Y.YEvent<YT>,
-  transaction: Y.Transaction
+  transaction: Y.Transaction,
 ) => void;
 
-export interface YObserve<DataT, YT extends Y.AbstractType<any>> {
+export interface YObserve<DataT, YT extends YType> {
   readonly data: DataT;
   readonly event?: Y.YEvent<YT>;
   readonly type: YT;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useYObserve<YT extends Y.AbstractType<any>, DataT>(
+export function useYObserve<YT extends YType, DataT>(
   yType: YT,
   initial: DataT,
   serialize: () => DataT,
-  fps = 30
+  fps = 30,
 ): YObserve<DataT, YT> {
   const [details, setDetails] = useThrottle(
     { data: initial, event: undefined as Y.YEvent<YT> | undefined },
-    fps
+    fps,
   );
   const [observer, setObserver] = React.useState<ObserveFunc<YT>>();
 

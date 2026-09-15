@@ -18,7 +18,11 @@ interface Props {
   readonly onJoin: (session: string, name: string, color: string) => void;
 }
 
-export function JoinDialog({ liveSession, open, onJoin }: Props): JSX.Element {
+export function JoinDialog({
+  liveSession,
+  open,
+  onJoin,
+}: Props): React.JSX.Element {
   const [session, setSession] = React.useState("");
   const [name, setName] = React.useState("");
   const [color, setColor] = React.useState(randomColor());
@@ -27,7 +31,6 @@ export function JoinDialog({ liveSession, open, onJoin }: Props): JSX.Element {
     if (!liveSession) return;
 
     setSession(liveSession);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [liveSession]);
 
   function handleNameChange(e: React.ChangeEvent<Value>): void {

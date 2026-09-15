@@ -6,7 +6,7 @@ type AwarenessCallbackChanges = {
 
 type AwarenessCallback = (
   changed: AwarenessCallbackChanges,
-  origin: unknown
+  origin: unknown,
 ) => void;
 
 type AwarenessProtocol = {

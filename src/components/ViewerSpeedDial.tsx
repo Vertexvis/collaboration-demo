@@ -29,7 +29,7 @@ export function ViewerSpeedDial({
   pinTool: { enabled, onClick },
   undoManager,
   viewer,
-}: Props): JSX.Element {
+}: Props): React.JSX.Element {
   const actions: ActionProps[] = [
     {
       icon: <ZoomOutMapOutlined />,
@@ -49,7 +49,7 @@ export function ViewerSpeedDial({
         icon: <Undo />,
         name: "Undo",
         onClick: () => undo(),
-      }
+      },
     );
   }
 

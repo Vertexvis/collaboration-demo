@@ -23,7 +23,7 @@ export function Chat({
   onSend,
   onTextChange,
   text,
-}: Props): JSX.Element {
+}: Props): React.JSX.Element {
   return (
     <>
       <List dense disablePadding sx={{ maxHeight: 350, overflowY: "scroll" }}>

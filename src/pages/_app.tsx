@@ -1,4 +1,5 @@
 import "@vertexvis/viewer/dist/viewer/viewer.css";
+import "../lib/randomUUID-shim";
 
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
@@ -14,7 +15,10 @@ import theme from "../lib/theme";
 const cache = createCache({ key: "css", prepend: true });
 cache.compat = true;
 
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
+export default function App({
+  Component,
+  pageProps,
+}: AppProps): React.JSX.Element {
   const router = useRouter();
 
   React.useEffect(() => {

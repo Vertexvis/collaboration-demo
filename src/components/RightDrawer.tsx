@@ -4,7 +4,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Drawer from "@mui/material/Drawer";
 import { drawerClasses } from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 import React from "react";
 
 import { Message, Value } from "../lib/state";
@@ -21,16 +21,16 @@ interface Props {
   readonly open: boolean;
 }
 
-const Title = styled((props: any) => <Typography variant="body2" {...props} />)(
-  () => ({ textTransform: "uppercase" })
-);
+const Title = styled((props: TypographyProps) => (
+  <Typography variant="body2" {...props} />
+))(() => ({ textTransform: "uppercase" }));
 
 export function RightDrawer({
   messages,
   participants,
   onSend,
   open,
-}: Props): JSX.Element {
+}: Props): React.JSX.Element {
   const [text, setText] = React.useState("");
   const enterPressed = useKeyPress("Enter");
 

@@ -1,8 +1,7 @@
 import React from "react";
 
-export function AlwaysScrollToBottom(): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ref = React.useRef<any>();
+export function AlwaysScrollToBottom(): React.JSX.Element {
+  const ref = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (ref.current == null) return;

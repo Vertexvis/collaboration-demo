@@ -1,5 +1,4 @@
-import { ColorMaterial, Components } from "@vertexvis/viewer";
-import { FrameCamera } from "@vertexvis/viewer/dist/types/lib/types/frameCamera";
+import { ColorMaterial, Components, FrameCamera } from "@vertexvis/viewer";
 
 interface Req {
   readonly viewer: Components.VertexViewer | null;
@@ -16,7 +15,7 @@ interface HideByItemIdReq extends Req {
 }
 
 interface UpdateCameraReq extends Req {
-  readonly camera: Partial<FrameCamera>;
+  readonly camera: Partial<FrameCamera.FrameCamera>;
 }
 
 export function createSelectColor(hex: string): ColorMaterial.ColorMaterial {

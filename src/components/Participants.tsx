@@ -22,7 +22,7 @@ export function Participants({
   clientId,
   cameraController,
   onCameraController,
-}: Props): JSX.Element {
+}: Props): React.JSX.Element {
   return (
     <List dense>
       {Object.entries(awareness).map(([k, v]) => (

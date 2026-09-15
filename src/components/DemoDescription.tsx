@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import React from "react";
 
-export function DemoDescription(): JSX.Element {
+export function DemoDescription(): React.JSX.Element {
   return (
     <Box sx={{ mx: 2, my: 2 }}>
       <Typography sx={{ mb: 2 }} variant="body2">
