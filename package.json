@@ -49,13 +49,13 @@
     "flatted": "3.4.2",
     "html-tokenize": "^2.0.1",
     "json5": "^2.2.2",
+    "lib0": "^0.2.99",
     "minimatch": "^3.0.5",
+    "picomatch": "^2.3.2",
     "protobufjs": "7.5.6",
     "semver": "^7.5.2",
     "word-wrap": "^1.2.4",
-    "y-webrtc/lib0": "^0.2.99",
-    "eslint-config-next/**/picomatch": "2.3.2",
-    "y-webrtc/**/ws": "8.21.0"
+    "ws": "^8.21.0"
   },
   "scripts": {
     "build": "next build",
