@@ -53,7 +53,9 @@
     "protobufjs": "7.5.6",
     "semver": "^7.5.2",
     "word-wrap": "^1.2.4",
-    "y-webrtc/lib0": "^0.2.99"
+    "y-webrtc/lib0": "^0.2.99",
+    "eslint-config-next/**/picomatch": "2.3.2",
+    "y-webrtc/**/ws": "8.21.0"
   },
   "scripts": {
     "build": "next build",
